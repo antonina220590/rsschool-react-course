@@ -1,0 +1,3 @@
+{
+  "/src/**/*.{ts,tsx}": ["format:fix", "lint"]
+}

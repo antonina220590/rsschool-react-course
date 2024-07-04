@@ -16,10 +16,10 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: ['./tsconfig.json', './tsconfig.app.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
     ecmaFeatures: {
       jsx: true,
     },
+    tsconfigRootDir: __dirname,
   },
   plugins: ['react-refresh', 'react-compiler', 'prettier'],
   rules: {
@@ -27,6 +27,14 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "off",
     'react-compiler/react-compiler': 'error',
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true
+      }
+    ],
   },
 };
