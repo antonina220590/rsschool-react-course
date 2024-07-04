@@ -16,10 +16,10 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: ['./tsconfig.json', './tsconfig.app.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
     ecmaFeatures: {
       jsx: true,
     },
-    tsconfigRootDir: __dirname,
   },
   plugins: ['react-refresh', 'react-compiler', 'prettier'],
   rules: {
