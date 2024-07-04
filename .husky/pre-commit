@@ -1,0 +1,3 @@
+cd RSSCHOOL-REACT_COURSE
+
+npx lint-staged
