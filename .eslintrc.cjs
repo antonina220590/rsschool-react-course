@@ -30,6 +30,7 @@ module.exports = {
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": "off",
     'react-compiler/react-compiler': 'error',
+    "@typescript-eslint/no-explicit-any": "error",
     "prettier/prettier": [
       "error",
       {
