@@ -2,15 +2,16 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   extends: [
-    "airbnb",
-    "airbnb-typescript",
-    "airbnb/hooks",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:react/jsx-runtime"
+    'airbnb',
+    'airbnb-typescript',
+    'airbnb/hooks',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:prettier/recommended',
   ],
-  ignorePatterns: ["dist", ".eslintrc.cjs"],
-  parser: "@typescript-eslint/parser",
+  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -20,12 +21,12 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ["react-refresh", "react-compiler"],
+  plugins: ['react-refresh', 'react-compiler', 'prettier'],
   rules: {
-    "react-refresh/only-export-components": [
-      "warn",
+    'react-refresh/only-export-components': [
+      'warn',
       { allowConstantExport: true },
     ],
-    "react-compiler/react-compiler": "error",
+    'react-compiler/react-compiler': 'error',
   },
 };
