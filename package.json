@@ -9,7 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md}\"",
     "preview": "vite preview",
-    "prepare": "cd .. && husky rsschool-react-course/.husky"
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^18.3.1",
