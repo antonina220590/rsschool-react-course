@@ -27,15 +27,16 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    "no-shadow": "off",
-    "@typescript-eslint/no-shadow": "off",
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'off',
     'react-compiler/react-compiler': 'error',
-    "@typescript-eslint/no-explicit-any": "error",
-    "prettier/prettier": [
-      "error",
+    '@typescript-eslint/no-explicit-any': 'error',
+    'react/prefer-stateless-function': 'off',
+    'prettier/prettier': [
+      'error',
       {
-        "singleQuote": true
-      }
+        singleQuote: true,
+      },
     ],
   },
 };
