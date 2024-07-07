@@ -1,16 +1,19 @@
 import { Component } from 'react';
 import style from './cards.module.css';
 import SWApi from '../../api/api';
-import { IPlanet } from '../../utils/interface';
+import { IPlanet, IProps } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 
-class Cards extends Component {
+class Cards extends Component<object, { planetList: []; loading: boolean }> {
   myApi = new SWApi();
 
-  state = {
-    planetList: [],
-    loading: true,
-  };
+  constructor(props: IProps) {
+    super(props);
+    this.state = {
+      planetList: [],
+      loading: true,
+    };
+  }
 
   componentDidMount(): void {
     this.myApi.getAllPlanet().then((planetList) => {
