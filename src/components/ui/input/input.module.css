@@ -10,7 +10,7 @@
   width: 140px;
   height: 45px;
   cursor: pointer;
-  color: black;
+  color: white;
   background-color: #5555ff;
   outline: none;
   border: none;
@@ -20,4 +20,5 @@
 
 .searchBtn:hover {
   background-color: #04d9ff;
+  color: black;
 }

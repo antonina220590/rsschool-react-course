@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import style from './cards.module.css';
 import SWApi from '../../api/api';
-import IPlanet from '../../utils/interface';
+import { IPlanet } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 
 class Cards extends Component {

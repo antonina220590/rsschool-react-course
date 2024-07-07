@@ -1,4 +1,6 @@
-export default interface IPlanet {
+import { ReactElement } from 'react';
+
+export interface IPlanet {
   climate: string;
   created: Date;
   diameter: string;
@@ -11,4 +13,13 @@ export default interface IPlanet {
   surface_water: string;
   terrain: string;
   url: string;
+}
+
+export interface IProps {
+  children: React.ReactNode;
+  fallback?: ReactElement;
+}
+
+export interface IState {
+  hasError: boolean;
 }

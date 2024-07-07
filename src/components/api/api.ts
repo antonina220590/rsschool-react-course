@@ -8,8 +8,12 @@ class SWApi {
   }
 
   async getAllPlanet() {
-    const res = await this.getData('https://swapi.dev/api/planets/');
-    return res.results;
+    try {
+      const res = await this.getData('https://swapi.dev/api/planets/');
+      return res.results;
+    } catch {
+      throw new Error('Impossible to fetch data');
+    }
   }
 
   getPlanet(id: number) {

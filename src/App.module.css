@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: url('./public/bg.jpg');
+  background-image: url('/bg.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }

@@ -4,7 +4,7 @@ import style from './input.module.css';
 class Input extends Component {
   render() {
     return (
-      <>
+      <div>
         <input
           className={style.input}
           id="input"
@@ -15,7 +15,7 @@ class Input extends Component {
         <button className={style.searchBtn} type="button">
           Search
         </button>
-      </>
+      </div>
     );
   }
 }
