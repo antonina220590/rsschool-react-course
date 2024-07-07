@@ -2,30 +2,40 @@ import { Component } from 'react';
 import style from './cards.module.css';
 import SWApi from '../../api/api';
 import IPlanet from '../../utils/interface';
+import Spinner from '../spinner/spinner';
 
 class Cards extends Component {
   myApi = new SWApi();
 
   state = {
     planetList: [],
+    loading: true,
   };
 
   componentDidMount(): void {
     this.myApi.getAllPlanet().then((planetList) => {
       this.setState({
         planetList,
+        loading: false,
       });
     });
   }
 
   renderCards(arr: IPlanet[]) {
     return arr.map((planet) => {
+      const id = planet.url.split('/')[5];
       return (
         <div className={style.cardContainer} key={planet.name}>
           <div className={style.cardImageBox}>
             <img
               className={style.cardImage}
-              src="https://starwars-visualguide.com/assets/img/planets/2.jpg"
+              src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
+              onError={({ currentTarget }) => {
+                const newTarget = currentTarget;
+                newTarget.onerror = null;
+                newTarget.src =
+                  'https://starwars-visualguide.com/assets/img/big-placeholder.jpg';
+              }}
               alt="planet"
             />
           </div>
@@ -63,12 +73,12 @@ class Cards extends Component {
   }
 
   render() {
-    const { planetList } = this.state;
-    if (!planetList) {
-      <p>No data available</p>;
+    const { planetList, loading } = this.state;
+    if (loading) {
+      return <Spinner />;
     }
     const items = this.renderCards(planetList);
-    return <div className={style.cardsCommonBox}>{items};</div>;
+    return <div className={style.cardsCommonBox}>{items}</div>;
   }
 }
 
