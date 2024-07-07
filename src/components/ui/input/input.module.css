@@ -11,10 +11,11 @@
   height: 45px;
   cursor: pointer;
   color: black;
-  background-color: #bc13fe;
+  background-color: #5555ff;
   outline: none;
   border: none;
   font-size: 20px;
+  border-radius: 5px;
 }
 
 .searchBtn:hover {

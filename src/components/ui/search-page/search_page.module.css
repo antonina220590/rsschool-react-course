@@ -1,6 +1,6 @@
-.header_container {
+.headerWrapper {
   display: flex;
-  width: 1220px;
+  width: 1320px;
   margin: 0 auto;
   background: rgba(155, 155, 155, 0.7);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.5);
@@ -10,4 +10,18 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
   justify-content: center;
   align-items: center;
+  margin-bottom: 20px;
+}
+
+.cardsWrapper {
+  display: flex;
+  width: 1320px;
+  margin: 0 auto;
+  background: rgba(155, 155, 155, 0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.5);
+  backdrop-filter: blur(5.5px);
+  -webkit-backdrop-filter: blur(5.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  flex-wrap: wrap;
 }

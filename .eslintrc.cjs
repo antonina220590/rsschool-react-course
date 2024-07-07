@@ -32,6 +32,8 @@ module.exports = {
     'react-compiler/react-compiler': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     'react/prefer-stateless-function': 'off',
+    'react/state-in-constructor': 'off',
+    'class-methods-use-this': 'off',
     'prettier/prettier': [
       'error',
       {
