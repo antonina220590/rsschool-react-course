@@ -18,6 +18,7 @@ export interface IPlanet {
 export interface IProps {
   children: React.ReactNode;
   fallback?: ReactElement;
+  searchValue?: string;
 }
 
 export interface IState {

@@ -16,7 +16,7 @@ class Cards extends Component<object, { planetList: []; loading: boolean }> {
   }
 
   componentDidMount(): void {
-    this.myApi.getAllPlanet().then((planetList) => {
+    this.myApi.getSearch('').then((planetList) => {
       this.setState({
         planetList,
         loading: false,
