@@ -5,8 +5,9 @@ import { IPlanet } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 
 function Cards() {
-  const value = localStorage.getItem('ATSearch') || '';
-
+  const [value, setValue] = useState<string>(
+    localStorage.getItem('ATSearch') || ''
+  );
   const [planets, setPlanets] = useState<IPlanet[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -15,6 +16,7 @@ function Cards() {
       const fetched = await getSearch(value);
       setPlanets(fetched);
       setIsLoading(true);
+      setValue(localStorage.getItem('ATSearch') || '');
     };
     getData();
   }, [value, isLoading]);

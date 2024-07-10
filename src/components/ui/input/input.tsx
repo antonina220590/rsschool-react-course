@@ -1,51 +1,39 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import style from './input.module.css';
-import { IProps } from '../../utils/interface';
 
-class Input extends Component<object, { searchValue: string }> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      searchValue: localStorage.getItem('ATSearch') || '',
-    };
-  }
+function Input() {
+  const [value, setValue] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>(
+    localStorage.getItem('ATSearch') || ''
+  );
 
-  handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    this.setState({
-      searchValue: value,
-    });
-  };
-
-  handleLS = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    const { searchValue } = this.state;
-    localStorage.setItem('ATSearch', `${searchValue}`);
+    setSearchValue(event.target.value);
+    setValue(value);
   };
 
-  render() {
-    const { searchValue } = this.state;
-    return (
-      <div>
-        <input
-          className={style.input}
-          id="input"
-          name="input"
-          type="text"
-          value={searchValue}
-          onChange={this.handleSearchValue}
-          placeholder="search....."
-        />
-        <button
-          className={style.searchBtn}
-          type="button"
-          onClick={this.handleLS}
-        >
-          Search
-        </button>
-      </div>
-    );
-  }
+  const handleLS = () => {
+    localStorage.setItem('ATSearch', searchValue);
+    setValue(localStorage.getItem('ATSearch') || '');
+  };
+
+  return (
+    <div>
+      <input
+        className={style.input}
+        id="input"
+        name="input"
+        type="text"
+        value={searchValue}
+        onChange={handleSearchValue}
+        placeholder="search....."
+      />
+      <button className={style.searchBtn} type="button" onClick={handleLS}>
+        Search
+      </button>
+    </div>
+  );
 }
 
 export default Input;
