@@ -1,53 +1,31 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
-// import Input from '../input/input';
+import Input from '../input/input';
 import Cards from '../cards/cards';
 import { IPlanet } from '../../utils/interface';
 
 function SearchPage() {
   const BASE_URL = 'https://swapi.dev/api/';
   const [planets, setPlanets] = useState<IPlanet[] | null>([]);
+  const [valueV, setValueV] = useState<string>(
+    localStorage.getItem('ATSearch') || ''
+  );
 
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [value, setValue] = useState<string>('');
-
-  const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setSearchValue(event.target.value);
-  };
-
-  const getData = () => {
-    localStorage.setItem('ATSearch', searchValue);
-    setValue(searchValue);
-  };
-
-  const fetchPlanets = useCallback(async () => {
-    fetch(`${BASE_URL}/planets/?search=${value}`)
-      .then((res) => res.json())
-      .then((data) => setPlanets(data.results));
-  }, [value]);
+  const getMyData = (value: string) =>
+    setValueV(localStorage.getItem('ATSearch') || value);
 
   useEffect(() => {
-    fetchPlanets();
-  }, [fetchPlanets]);
+    fetch(`${BASE_URL}/planets/?search=${valueV}`)
+      .then((res) => res.json())
+      .then((data) => setPlanets(data.results));
+  }, [valueV]);
 
   return (
     <>
       <div className={style.headerWrapper}>
         <div>
-          <input
-            className={style.input}
-            id="input"
-            name="input"
-            type="text"
-            value={searchValue}
-            onChange={handleSearchValue}
-            placeholder="search....."
-          />
-          <button className={style.searchBtn} type="button" onClick={getData}>
-            Search
-          </button>
+          <Input onClick={getMyData} />
         </div>
       </div>
       <div className={style.cardsWrapper}>
