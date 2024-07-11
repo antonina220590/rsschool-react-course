@@ -38,3 +38,9 @@
 .errorBtn:hover {
   background-color: deepskyblue;
 }
+
+.commonWrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
