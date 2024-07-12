@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
@@ -18,6 +18,15 @@ function SearchPage() {
   const getMyData = (value: string) =>
     setValueV(localStorage.getItem('ATSearch') || value);
 
+  const navigate = useNavigate();
+  const link = window.location.href;
+
+  const goBack = () => {
+    if (link.includes('planet')) {
+      navigate(-1);
+    }
+  };
+
   useEffect(() => {
     const fetchPlanets = async () => {
       try {
@@ -35,7 +44,7 @@ function SearchPage() {
 
   return (
     <>
-      <div className={style.headerWrapper}>
+      <div className={style.headerWrapper} onClick={goBack} role="presentation">
         <div>
           <Input onClick={getMyData} />
         </div>
@@ -44,15 +53,18 @@ function SearchPage() {
         {isLoading ? (
           <Spinner />
         ) : (
-          <div className={style.commonWrapper}>
+          <div
+            className={style.commonWrapper}
+            onClick={goBack}
+            role="presentation"
+          >
             {planets?.map((planet) => {
               return (
-                <Link
-                  className={style.link}
-                  to="/main/:pageId/planet/:planetId"
-                  key={planet.name}
-                >
-                  <div className={styles.cardContainer}>
+                <div className={styles.cardContainer} key={planet.name}>
+                  <Link
+                    className={style.link}
+                    to={`/main/:pageId/planet/:${planet.url.split('/')[5]}`}
+                  >
                     <Cards
                       name={planet.name}
                       climate={planet.climate}
@@ -64,15 +76,13 @@ function SearchPage() {
                       terrain={planet.terrain}
                       url={planet.url}
                     />
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               );
             })}
           </div>
         )}
-        <div>
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </>
   );

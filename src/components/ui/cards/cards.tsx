@@ -3,13 +3,13 @@ import { IPlanet } from '../../utils/interface';
 
 function Cards({
   name,
-  climate,
-  diameter,
-  gravity,
-  orbital_period,
-  population,
-  rotation_period,
-  terrain,
+  // climate,
+  // diameter,
+  // gravity,
+  // orbital_period,
+  // population,
+  // rotation_period,
+  // terrain,
   url,
 }: IPlanet) {
   return (
@@ -30,7 +30,7 @@ function Cards({
       </div>
       <div className={style.cardInfo}>
         <h3 className={style.cardTitle}>{name}</h3>
-        <p className={style.cardDescription}>
+        {/* <p className={style.cardDescription}>
           Rotation Period:{' '}
           <span className={style.fetchInfo}>{rotation_period}</span>
         </p>
@@ -53,7 +53,7 @@ function Cards({
         </p>
         <p className={style.cardDescription}>
           Population: <span className={style.fetchInfo}>{population}</span>
-        </p>
+        </p> */}
       </div>
     </>
   );
