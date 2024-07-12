@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
@@ -46,23 +47,32 @@ function SearchPage() {
           <div className={style.commonWrapper}>
             {planets?.map((planet) => {
               return (
-                <div className={styles.cardContainer} key={planet.name}>
-                  <Cards
-                    name={planet.name}
-                    climate={planet.climate}
-                    diameter={planet.diameter}
-                    gravity={planet.gravity}
-                    orbital_period={planet.orbital_period}
-                    population={planet.population}
-                    rotation_period={planet.rotation_period}
-                    terrain={planet.terrain}
-                    url={planet.url}
-                  />
-                </div>
+                <Link
+                  className={style.link}
+                  to="/main/:pageId/planet/:planetId"
+                  key={planet.name}
+                >
+                  <div className={styles.cardContainer}>
+                    <Cards
+                      name={planet.name}
+                      climate={planet.climate}
+                      diameter={planet.diameter}
+                      gravity={planet.gravity}
+                      orbital_period={planet.orbital_period}
+                      population={planet.population}
+                      rotation_period={planet.rotation_period}
+                      terrain={planet.terrain}
+                      url={planet.url}
+                    />
+                  </div>
+                </Link>
               );
             })}
           </div>
         )}
+        <div>
+          <Outlet />
+        </div>
       </div>
     </>
   );

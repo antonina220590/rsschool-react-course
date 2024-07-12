@@ -8,18 +8,20 @@
 }
 
 .cardImage {
-  width: 300px;
-  height: 300px;
+  width: 100px;
+  height: 100px;
 }
 
 .cardTitle {
   padding-bottom: 15px;
   font-size: 25px;
+  color: black;
 }
 
 .cardDescription {
   font-weight: 600;
   font-size: 20px;
+  color: black;
 }
 
 .fetchInfo {

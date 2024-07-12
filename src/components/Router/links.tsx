@@ -1,7 +1,7 @@
 const Links = {
   root: '/',
-  mainPage: '/page/:pageId',
-  detailsPage: '/page/:pageId/planet/:planetId',
+  mainPage: '/main/:pageId',
+  detailsPage: '/main/:pageId/planet/:planetId',
   notFoundPage: '/',
 } as const;
 

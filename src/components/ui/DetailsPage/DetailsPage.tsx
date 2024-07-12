@@ -1,5 +1,11 @@
+import style from './details-page.module.css';
+
 function CardDetails() {
-  return <h1>Hi! I am card details page!</h1>;
+  return (
+    <div className={style.div}>
+      <h1>I am a cards details</h1>
+    </div>
+  );
 }
 
 export default CardDetails;
