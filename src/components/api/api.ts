@@ -21,9 +21,11 @@ export async function getPlanet(id: number) {
   return getData(`${BASE_URL}/planets/${id}/`);
 }
 
-export async function getSearch(name: string) {
+export async function getSearch(name: string, page: number = 1) {
   try {
-    const res = await getData(`${BASE_URL}/planets/?search=${name}`);
+    const res = await getData(
+      `${BASE_URL}/planets/?search=${name}&page=${page}`
+    );
     return res.results;
   } catch {
     throw new Error('Impossible to fetch data');

@@ -1,4 +1,4 @@
-import SearchPage from './components/ui/search-page/search_page';
+import SearchPage from './components/ui/MainPage/MainPage';
 import style from './App.module.css';
 import ErrorBoundary from './components/utils/errorBoundary';
 
