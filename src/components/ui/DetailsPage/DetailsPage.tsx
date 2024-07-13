@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { IPlanet } from '../../utils/interface';
 import styles from './details-page.module.css';
 import style from '../cards/cards.module.css';
@@ -7,28 +7,23 @@ import { getPlanet } from '../../api/api';
 import Spinner from '../spinner/spinner';
 
 function CardDetails() {
-  const pageId = window.location.href;
-  const result = pageId.split('/')[6].slice(1);
+  const { planetId } = useParams();
+  const result = Number(planetId?.slice(1));
 
   const [planet, setPlanet] = useState<IPlanet>();
-  const [planetId, setPlanetId] = useState<number>(Number(result));
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
-  const link = window.location.href;
 
-  const goBack = () => {
-    if (link.includes('planet')) {
-      navigate(-1);
-    }
+  const closeCard = () => {
+    navigate('/');
   };
 
   useEffect(() => {
     const fetchPlanets = async () => {
-      setPlanetId(Number(result));
       try {
         setIsLoading(true);
-        const fetched = await getPlanet(planetId);
+        const fetched = await getPlanet(result);
         setPlanet(fetched);
       } catch (error) {
         <p>error</p>;
@@ -37,7 +32,7 @@ function CardDetails() {
       }
     };
     fetchPlanets();
-  }, [planetId, result]);
+  }, [result]);
 
   return (
     <div className={styles.detailsDiv}>
@@ -90,7 +85,7 @@ function CardDetails() {
               <span className={style.fetchInfo}>{planet?.population}</span>
             </p>
           </div>
-          <button className={styles.closeBtn} type="button" onClick={goBack}>
+          <button className={styles.closeBtn} type="button" onClick={closeCard}>
             Close
           </button>
         </>

@@ -1,29 +1,30 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
 import Cards from '../cards/cards';
-import { IPlanet } from '../../utils/interface';
+import { IPlanetMain } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 import { getSearch } from '../../api/api';
 
 function SearchPage() {
-  const [planets, setPlanets] = useState<IPlanet[] | null>([]);
+  const [planets, setPlanets] = useState<IPlanetMain[] | null>([]);
   const [valueV, setValueV] = useState<string>(
     localStorage.getItem('ATSearch') || ''
   );
   const [isLoading, setIsLoading] = useState(false);
+  const { planetId } = useParams();
+  const result = Number(planetId?.slice(1));
 
   const getMyData = (value: string) =>
     setValueV(localStorage.getItem('ATSearch') || value);
 
   const navigate = useNavigate();
-  const link = window.location.href;
 
   const goBack = () => {
-    if (link.includes('planet')) {
-      navigate(-1);
+    if (result) {
+      navigate('/');
     }
   };
 
@@ -64,18 +65,14 @@ function SearchPage() {
                   <Link
                     className={style.link}
                     to={`/main/:pageId/planet/:${planet.url.split('/')[5]}`}
+                    onClick={() =>
+                      navigate(
+                        `/main/:pageId/planet/:${planet.url.split('/')[5]}`
+                      )
+                    }
+                    onClickCapture={goBack}
                   >
-                    <Cards
-                      name={planet.name}
-                      climate={planet.climate}
-                      diameter={planet.diameter}
-                      gravity={planet.gravity}
-                      orbital_period={planet.orbital_period}
-                      population={planet.population}
-                      rotation_period={planet.rotation_period}
-                      terrain={planet.terrain}
-                      url={planet.url}
-                    />
+                    <Cards name={planet.name} url={planet.url} />
                   </Link>
                 </div>
               );

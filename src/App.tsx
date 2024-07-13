@@ -6,9 +6,8 @@ function App() {
   return (
     <div className={style.wrapper}>
       <ErrorBoundary>
-        <header className={style.header}>
-          <SearchPage />
-        </header>
+        <header className={style.header} />
+        <SearchPage />
       </ErrorBoundary>
     </div>
   );

@@ -15,6 +15,11 @@ export interface IPlanet {
   url: string;
 }
 
+export interface IPlanetMain {
+  name: string;
+  url: string;
+}
+
 export interface IProps {
   children: React.ReactNode;
   fallback?: ReactElement;

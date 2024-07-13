@@ -1,17 +1,7 @@
 import style from './cards.module.css';
-import { IPlanet } from '../../utils/interface';
+import { IPlanetMain } from '../../utils/interface';
 
-function Cards({
-  name,
-  // climate,
-  // diameter,
-  // gravity,
-  // orbital_period,
-  // population,
-  // rotation_period,
-  // terrain,
-  url,
-}: IPlanet) {
+function Cards({ name, url }: IPlanetMain) {
   return (
     <>
       <div className={style.cardImageBox}>
@@ -30,30 +20,6 @@ function Cards({
       </div>
       <div className={style.cardInfo}>
         <h3 className={style.cardTitle}>{name}</h3>
-        {/* <p className={style.cardDescription}>
-          Rotation Period:{' '}
-          <span className={style.fetchInfo}>{rotation_period}</span>
-        </p>
-        <p className={style.cardDescription}>
-          Orbital Period:{' '}
-          <span className={style.fetchInfo}>{orbital_period}</span>
-        </p>
-        <p className={style.cardDescription}>
-          Diameter:
-          <span className={style.fetchInfo}>{diameter}</span>
-        </p>
-        <p className={style.cardDescription}>
-          Climate: <span className={style.fetchInfo}>{climate}</span>
-        </p>
-        <p className={style.cardDescription}>
-          Gravity: <span className={style.fetchInfo}>{gravity}</span>
-        </p>
-        <p className={style.cardDescription}>
-          Terrain: <span className={style.fetchInfo}>{terrain}</span>
-        </p>
-        <p className={style.cardDescription}>
-          Population: <span className={style.fetchInfo}>{population}</span>
-        </p> */}
       </div>
     </>
   );
