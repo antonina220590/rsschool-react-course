@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IPlanet } from '../../utils/interface';
 import styles from './details-page.module.css';
 import style from '../cards/cards.module.css';
@@ -12,6 +13,15 @@ function CardDetails() {
   const [planet, setPlanet] = useState<IPlanet>();
   const [planetId, setPlanetId] = useState<number>(Number(result));
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const link = window.location.href;
+
+  const goBack = () => {
+    if (link.includes('planet')) {
+      navigate(-1);
+    }
+  };
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -80,6 +90,9 @@ function CardDetails() {
               <span className={style.fetchInfo}>{planet?.population}</span>
             </p>
           </div>
+          <button className={styles.closeBtn} type="button" onClick={goBack}>
+            Close
+          </button>
         </>
       )}
     </div>
