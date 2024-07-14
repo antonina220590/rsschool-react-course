@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+import {
+  Link,
+  Outlet,
+  useNavigate,
+  useParams,
+  // useSearchParams,
+} from 'react-router-dom';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
@@ -14,6 +20,11 @@ function SearchPage() {
   const [valueV, setValueV] = useState<string>(
     localStorage.getItem('ATSearch') || ''
   );
+
+  const [pageNum, setPageNum] = useState<number>(
+    Number(localStorage.getItem('ATPage') || 0)
+  );
+
   const [isLoading, setIsLoading] = useState(false);
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
@@ -21,7 +32,14 @@ function SearchPage() {
   const getMyData = (value: string) =>
     setValueV(localStorage.getItem('ATSearch') || value);
 
+  const getMyPage = () => {
+    setPageNum(Number(localStorage.getItem('ATPage') || 0));
+  };
+
   const navigate = useNavigate();
+
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const searchQuery = searchParams.get('search') || '';
 
   const goBack = () => {
     if (result) {
@@ -33,7 +51,7 @@ function SearchPage() {
     const fetchPlanets = async () => {
       try {
         setIsLoading(true);
-        const fetched = await getSearch(valueV);
+        const fetched = await getSearch(valueV, pageNum);
         setPlanets(fetched);
       } catch (error) {
         <p>error</p>;
@@ -42,7 +60,7 @@ function SearchPage() {
       }
     };
     fetchPlanets();
-  }, [valueV]);
+  }, [valueV, pageNum]);
 
   return (
     <>
@@ -51,7 +69,7 @@ function SearchPage() {
           <Input onClick={getMyData} />
         </div>
       </div>
-      <Pagination />
+      <Pagination onClickDecrease={getMyPage} onClickIncrease={getMyPage} />
       <div className={style.cardsWrapper}>
         {isLoading ? (
           <Spinner />

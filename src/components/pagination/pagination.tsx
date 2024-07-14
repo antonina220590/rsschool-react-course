@@ -2,21 +2,31 @@ import { useState } from 'react';
 // import { useSearchParams } from 'react-router-dom';
 import style from './pagination.module.css';
 
-function Pagination() {
+type PaginationProps = {
+  onClickIncrease: (arg: number) => void;
+  onClickDecrease: (arg: number) => void;
+};
+
+function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
+  const maxNumPage = 6;
   const [page, setPage] = useState<number>(1);
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const [pageCur, setPageCur] = useState(Number(searchParams.get('page')) || 1);
 
   const increasePage = () => {
-    if (page < 6) {
+    if (page < maxNumPage) {
       setPage(page + 1);
     }
+    const LSPage = (page + 1).toString();
+    localStorage.setItem('ATPage', LSPage);
+    onClickIncrease(Number(page));
   };
 
   const decreasePage = () => {
     if (page > 1) {
       setPage(page - 1);
     }
+    const LSPage = (page - 1).toString();
+    localStorage.setItem('ATPage', LSPage);
+    onClickDecrease(Number(page));
   };
 
   return (
@@ -28,7 +38,16 @@ function Pagination() {
       >
         Prev
       </button>
-      <div className={style.page}>{`${page}`}</div>
+      {/* <div className={style.page}>{`${page}`}</div> */}
+      <input
+        className={style.page}
+        id="input"
+        name="current-page"
+        type="text"
+        value={page}
+        // onChange={handleSearchValue}
+        placeholder="search....."
+      />
       <button
         className={page < 6 ? style.nextBtn : style.btn_disabled}
         type="button"
