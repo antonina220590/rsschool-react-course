@@ -7,6 +7,7 @@ import Cards from '../cards/cards';
 import { IPlanetMain } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 import { getSearch } from '../../api/api';
+import Pagination from '../../pagination/pagination';
 
 function SearchPage() {
   const [planets, setPlanets] = useState<IPlanetMain[] | null>([]);
@@ -50,6 +51,7 @@ function SearchPage() {
           <Input onClick={getMyData} />
         </div>
       </div>
+      <Pagination />
       <div className={style.cardsWrapper}>
         {isLoading ? (
           <Spinner />
@@ -64,11 +66,9 @@ function SearchPage() {
                 <div className={styles.cardContainer} key={planet.name}>
                   <Link
                     className={style.link}
-                    to={`/main/:pageId/planet/:${planet.url.split('/')[5]}`}
+                    to={`/planet/:${planet.url.split('/')[5]}`}
                     onClick={() =>
-                      navigate(
-                        `/main/:pageId/planet/:${planet.url.split('/')[5]}`
-                      )
+                      navigate(`/planet/:${planet.url.split('/')[5]}`)
                     }
                     onClickCapture={goBack}
                   >
