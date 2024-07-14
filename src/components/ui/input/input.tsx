@@ -15,18 +15,10 @@ function Input({ onClick }: InputProps) {
   );
 
   const [searchParams, setSearchParams] = useSearchParams();
-
   const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setSearchValue(event.target.value);
   };
-
-  // const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const form = event.currentTarget;
-  //   const query = form.search.value.toLowerCase();
-  //   setSearchParams({ search: query });
-  // };
 
   const getData = () => {
     localStorage.setItem('ATSearch', searchValue);
@@ -39,7 +31,6 @@ function Input({ onClick }: InputProps) {
 
   return (
     <div>
-      {/* <Form id="search-form" role="search" onSubmit={handleFormSubmit}> */}
       <input
         className={style.input}
         id="input"
@@ -52,7 +43,6 @@ function Input({ onClick }: InputProps) {
       <button className={style.searchBtn} type="submit" onClick={getData}>
         Search
       </button>
-      {/* </Form> */}
     </div>
   );
 }

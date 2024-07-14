@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  Link,
-  Outlet,
-  useNavigate,
-  useParams,
-  // useSearchParams,
-} from 'react-router-dom';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
@@ -21,25 +15,30 @@ function SearchPage() {
     localStorage.getItem('ATSearch') || ''
   );
 
-  const [pageNum, setPageNum] = useState<number>(
-    Number(localStorage.getItem('ATPage') || 0)
+  const [pageNum, setPageNum] = useState<number>(() =>
+    Number(localStorage.getItem('ATPage') || 1)
   );
 
   const [isLoading, setIsLoading] = useState(false);
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
 
-  const getMyData = (value: string) =>
-    setValueV(localStorage.getItem('ATSearch') || value);
-
   const getMyPage = () => {
     setPageNum(Number(localStorage.getItem('ATPage') || 0));
   };
 
-  const navigate = useNavigate();
+  const changePage = () => {
+    if (localStorage.getItem('ATSearch')?.length) {
+      setPageNum(1);
+    }
+  };
 
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const searchQuery = searchParams.get('search') || '';
+  const getMyData = (value: string) => {
+    setValueV(localStorage.getItem('ATSearch') || value);
+    changePage();
+  };
+
+  const navigate = useNavigate();
 
   const goBack = () => {
     if (result) {
@@ -69,7 +68,11 @@ function SearchPage() {
           <Input onClick={getMyData} />
         </div>
       </div>
-      <Pagination onClickDecrease={getMyPage} onClickIncrease={getMyPage} />
+      <Pagination
+        onClickDecrease={getMyPage}
+        onClickIncrease={getMyPage}
+        onClick={changePage}
+      />
       <div className={style.cardsWrapper}>
         {isLoading ? (
           <Spinner />

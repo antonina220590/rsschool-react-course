@@ -2,7 +2,7 @@ const Links = {
   root: '/',
   mainPage: '/page/:pageId',
   detailsPage: 'planet/:planetId',
-  notFoundPage: '/',
+  notFoundPage: '/error',
 } as const;
 
 export default Links;

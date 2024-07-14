@@ -1,15 +1,33 @@
 import { useState } from 'react';
-// import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import style from './pagination.module.css';
 
 type PaginationProps = {
   onClickIncrease: (arg: number) => void;
   onClickDecrease: (arg: number) => void;
+  onClick: () => void;
 };
 
-function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
+function Pagination({
+  onClickDecrease,
+  onClickIncrease,
+  onClick,
+}: PaginationProps) {
   const maxNumPage = 6;
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(
+    Number(localStorage.getItem('ATPage')) || 1
+  );
+  const navigate = useNavigate();
+  const { planetId } = useParams();
+  const result = Number(planetId?.slice(1));
+
+  const goBack = () => {
+    if (result) {
+      navigate('/');
+    }
+  };
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const increasePage = () => {
     if (page < maxNumPage) {
@@ -17,7 +35,17 @@ function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
     }
     const LSPage = (page + 1).toString();
     localStorage.setItem('ATPage', LSPage);
+    setSearchParams({ page: LSPage });
     onClickIncrease(Number(page));
+  };
+
+  const searchLS = localStorage.getItem('ATSearch')?.length;
+
+  const changePage = () => {
+    if (searchLS) {
+      setPage(1);
+    }
+    onClick();
   };
 
   const decreasePage = () => {
@@ -26,11 +54,19 @@ function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
     }
     const LSPage = (page - 1).toString();
     localStorage.setItem('ATPage', LSPage);
+    if (searchParams) {
+      setSearchParams({ page: LSPage });
+    }
     onClickDecrease(Number(page));
+    changePage();
   };
 
   return (
-    <div className={style.paginationContainer}>
+    <div
+      className={style.paginationContainer}
+      onClick={goBack}
+      role="presentation"
+    >
       <button
         className={page === 1 ? style.btn_disabled : style.prevBtn}
         type="button"
@@ -38,18 +74,16 @@ function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
       >
         Prev
       </button>
-      {/* <div className={style.page}>{`${page}`}</div> */}
       <input
         className={style.page}
         id="input"
-        name="current-page"
+        name="page"
         type="text"
         value={page}
-        // onChange={handleSearchValue}
-        placeholder="search....."
+        readOnly
       />
       <button
-        className={page < 6 ? style.nextBtn : style.btn_disabled}
+        className={page > 5 ? style.btn_disabled : style.nextBtn}
         type="button"
         onClick={increasePage}
       >

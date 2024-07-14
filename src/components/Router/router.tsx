@@ -14,6 +14,10 @@ const router = createBrowserRouter([
         path: Links.detailsPage,
         element: <CardDetails />,
       },
+      {
+        path: Links.notFoundPage,
+        element: <NotFoundPage />,
+      },
     ],
   },
 ]);
