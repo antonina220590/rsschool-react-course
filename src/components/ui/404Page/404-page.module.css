@@ -1,0 +1,57 @@
+.errorMain {
+  display: flex;
+  background: #dfdfdf;
+}
+
+.error {
+  box-sizing: border-box;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  justify-content: space-evenly;
+  padding: 30px;
+  height: 96vh;
+  align-items: center;
+}
+
+.errorText {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.errorImagebox {
+  display: flex;
+  position: relative;
+  width: 778px;
+  height: 600px;
+  justify-content: flex-end;
+}
+
+.errorLink {
+  background: none;
+  background: none;
+  text-decoration: none;
+  font-size: 3rem;
+  color: yellowgreen;
+  border-bottom: 3px solid red;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: opacity 0.3s;
+}
+
+.errorMessage {
+  font-size: 4rem;
+  margin: 0;
+  color: black;
+}
