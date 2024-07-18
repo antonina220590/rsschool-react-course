@@ -15,7 +15,7 @@ function Pagination({
 }: PaginationProps) {
   const maxNumPage = 6;
   const [page, setPage] = useState<number>(
-    Number(localStorage.getItem('ATPage')) || 1
+    Number(localStorage.getItem('ATPage')) || 0
   );
   const navigate = useNavigate();
   const { planetId } = useParams();
@@ -31,7 +31,7 @@ function Pagination({
 
   const increasePage = () => {
     if (page < maxNumPage) {
-      setPage(page + 1);
+      setPage((prevPage) => prevPage + 1);
     }
     const LSPage = (page + 1).toString();
     localStorage.setItem('ATPage', LSPage);
@@ -50,7 +50,7 @@ function Pagination({
 
   const decreasePage = () => {
     if (page > 1) {
-      setPage(page - 1);
+      setPage((prevPage) => prevPage - 1);
     }
     const LSPage = (page - 1).toString();
     localStorage.setItem('ATPage', LSPage);
@@ -74,14 +74,7 @@ function Pagination({
       >
         Prev
       </button>
-      <input
-        className={style.page}
-        id="input"
-        name="page"
-        type="text"
-        value={page}
-        readOnly
-      />
+      <div className={style.page}>{page}</div>
       <button
         className={page > 5 ? style.btn_disabled : style.nextBtn}
         type="button"

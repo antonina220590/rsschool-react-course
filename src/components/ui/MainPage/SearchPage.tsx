@@ -7,7 +7,7 @@ import Cards from '../cards/cards';
 import { IPlanetMain } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 import { getSearch } from '../../api/api';
-import Pagination from '../../pagination/pagination';
+import Pagination from '../pagination/pagination';
 
 function SearchPage() {
   const [planets, setPlanets] = useState<IPlanetMain[] | null>([]);
