@@ -68,11 +68,7 @@ function SearchPage() {
           <Input onClick={getMyData} />
         </div>
       </div>
-      <Pagination
-        onClickDecrease={getMyPage}
-        onClickIncrease={getMyPage}
-        onClick={changePage}
-      />
+      <Pagination onClickDecrease={getMyPage} onClickIncrease={getMyPage} />
       <div className={style.cardsWrapper}>
         {isLoading ? (
           <Spinner />

@@ -1,22 +1,19 @@
-import { useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
+import { incremented, decremented } from '../../utils/counterSlice';
 import style from './pagination.module.css';
 
 type PaginationProps = {
   onClickIncrease: (arg: number) => void;
   onClickDecrease: (arg: number) => void;
-  onClick: () => void;
 };
 
-function Pagination({
-  onClickDecrease,
-  onClickIncrease,
-  onClick,
-}: PaginationProps) {
+function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
   const maxNumPage = 6;
-  const [page, setPage] = useState<number>(
-    Number(localStorage.getItem('ATPage')) || 0
-  );
+
+  const page = useAppSelector((state) => state.counter.value);
+  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
@@ -31,7 +28,7 @@ function Pagination({
 
   const increasePage = () => {
     if (page < maxNumPage) {
-      setPage((prevPage) => prevPage + 1);
+      dispatch(incremented());
     }
     const LSPage = (page + 1).toString();
     localStorage.setItem('ATPage', LSPage);
@@ -39,18 +36,9 @@ function Pagination({
     onClickIncrease(Number(page));
   };
 
-  const searchLS = localStorage.getItem('ATSearch')?.length;
-
-  const changePage = () => {
-    if (searchLS) {
-      setPage(1);
-    }
-    onClick();
-  };
-
   const decreasePage = () => {
     if (page > 1) {
-      setPage((prevPage) => prevPage - 1);
+      dispatch(decremented());
     }
     const LSPage = (page - 1).toString();
     localStorage.setItem('ATPage', LSPage);
@@ -58,7 +46,6 @@ function Pagination({
       setSearchParams({ page: LSPage });
     }
     onClickDecrease(Number(page));
-    changePage();
   };
 
   return (
