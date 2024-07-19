@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+import {
+  Link,
+  Outlet,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
@@ -8,6 +14,7 @@ import { IPlanetMain } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 import { getSearch } from '../../api/api';
 import Pagination from '../pagination/pagination';
+import { useAppSelector } from '../../../app/hooks';
 
 function SearchPage() {
   const [planets, setPlanets] = useState<IPlanetMain[] | null>([]);
@@ -15,34 +22,22 @@ function SearchPage() {
     localStorage.getItem('ATSearch') || ''
   );
 
-  const [pageNum, setPageNum] = useState<number>(() =>
-    Number(localStorage.getItem('ATPage') || 1)
-  );
+  const [searchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page'));
 
   const [isLoading, setIsLoading] = useState(false);
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
-
-  const getMyPage = () => {
-    setPageNum(Number(localStorage.getItem('ATPage') || 0));
-  };
-
-  const changePage = () => {
-    if (localStorage.getItem('ATSearch')?.length) {
-      setPageNum(1);
-    }
-  };
-
   const getMyData = (value: string) => {
     setValueV(localStorage.getItem('ATSearch') || value);
-    changePage();
   };
 
   const navigate = useNavigate();
+  const currPage = useAppSelector((state) => state.counter.value).toString();
 
   const goBack = () => {
     if (result) {
-      navigate('/');
+      navigate(`/?page=${currPage}`);
     }
   };
 
@@ -50,7 +45,7 @@ function SearchPage() {
     const fetchPlanets = async () => {
       try {
         setIsLoading(true);
-        const fetched = await getSearch(valueV, pageNum);
+        const fetched = await getSearch(valueV, currentPage || 1);
         setPlanets(fetched);
       } catch (error) {
         <p>error</p>;
@@ -59,7 +54,7 @@ function SearchPage() {
       }
     };
     fetchPlanets();
-  }, [valueV, pageNum]);
+  }, [valueV, currentPage]);
 
   return (
     <>
@@ -68,7 +63,7 @@ function SearchPage() {
           <Input onClick={getMyData} />
         </div>
       </div>
-      <Pagination onClickDecrease={getMyPage} onClickIncrease={getMyPage} />
+      <Pagination />
       <div className={style.cardsWrapper}>
         {isLoading ? (
           <Spinner />
@@ -83,7 +78,7 @@ function SearchPage() {
                 <div className={styles.cardContainer} key={planet.name}>
                   <Link
                     className={style.link}
-                    to={`/planet/:${planet.url.split('/')[5]}`}
+                    to={`/planet/:${planet.url.split('/')[5]}/?page=${currPage}`}
                     onClick={() =>
                       navigate(`/planet/:${planet.url.split('/')[5]}`)
                     }

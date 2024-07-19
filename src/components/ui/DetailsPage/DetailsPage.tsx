@@ -5,6 +5,7 @@ import styles from './details-page.module.css';
 import style from '../cards/cards.module.css';
 import { getPlanet } from '../../api/api';
 import Spinner from '../spinner/spinner';
+import { useAppSelector } from '../../../app/hooks';
 
 function CardDetails() {
   const { planetId } = useParams();
@@ -12,11 +13,14 @@ function CardDetails() {
 
   const [planet, setPlanet] = useState<IPlanet>();
   const [isLoading, setIsLoading] = useState(false);
+  const currPage = useAppSelector((state) => state.counter.value).toString();
 
   const navigate = useNavigate();
 
   const closeCard = () => {
-    navigate('/');
+    if (result) {
+      navigate(`/?page=${currPage}`);
+    }
   };
 
   useEffect(() => {

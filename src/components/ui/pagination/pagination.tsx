@@ -3,37 +3,24 @@ import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { incremented, decremented } from '../../utils/counterSlice';
 import style from './pagination.module.css';
 
-type PaginationProps = {
-  onClickIncrease: (arg: number) => void;
-  onClickDecrease: (arg: number) => void;
-};
-
-function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
+function Pagination() {
   const maxNumPage = 6;
 
   const page = useAppSelector((state) => state.counter.value);
+
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
-
-  const goBack = () => {
-    if (result) {
-      navigate('/');
-    }
-  };
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const increasePage = () => {
     if (page < maxNumPage) {
       dispatch(incremented());
     }
     const LSPage = (page + 1).toString();
-    localStorage.setItem('ATPage', LSPage);
     setSearchParams({ page: LSPage });
-    onClickIncrease(Number(page));
   };
 
   const decreasePage = () => {
@@ -41,11 +28,15 @@ function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
       dispatch(decremented());
     }
     const LSPage = (page - 1).toString();
-    localStorage.setItem('ATPage', LSPage);
     if (searchParams) {
       setSearchParams({ page: LSPage });
     }
-    onClickDecrease(Number(page));
+  };
+
+  const goBack = () => {
+    if (result) {
+      navigate(`/?page=${page}`);
+    }
   };
 
   return (
@@ -61,7 +52,7 @@ function Pagination({ onClickDecrease, onClickIncrease }: PaginationProps) {
       >
         Prev
       </button>
-      <div className={style.page}>{page}</div>
+      <div className={style.page}>{page || 1}</div>
       <button
         className={page > 5 ? style.btn_disabled : style.nextBtn}
         type="button"

@@ -10,6 +10,10 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <NotFoundPage />,
     children: [
+      // {
+      //   index: true,
+      //   element: <Navigate to={Links.mainPage} />,
+      // },
       {
         path: Links.detailsPage,
         element: <CardDetails />,

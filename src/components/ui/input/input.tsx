@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { reset } from '../../utils/counterSlice';
 import style from './input.module.css';
 
@@ -17,6 +17,7 @@ function Input({ onClick }: InputProps) {
   );
 
   const dispatch = useAppDispatch();
+  const currPage = useAppSelector((state) => state.counter.value).toString();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +30,7 @@ function Input({ onClick }: InputProps) {
     localStorage.setItem('ATSearch', searchValue);
     setValue(searchValue);
     if (searchParams) {
-      setSearchParams({ search: searchValue });
+      setSearchParams({ search: searchValue, page: currPage });
     }
 
     onClick(value);
