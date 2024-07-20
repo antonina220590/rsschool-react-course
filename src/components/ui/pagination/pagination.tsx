@@ -52,7 +52,9 @@ function Pagination() {
       >
         Prev
       </button>
-      <div className={style.page}>{page || 1}</div>
+      <div className={style.page}>
+        {searchParams.has('page') ? searchParams.get('page') : 1}
+      </div>
       <button
         className={page > 5 ? style.btn_disabled : style.nextBtn}
         type="button"

@@ -26,7 +26,9 @@ function Input({ onClick }: InputProps) {
   };
 
   const getData = () => {
-    dispatch(reset());
+    if (searchValue) {
+      dispatch(reset());
+    }
     localStorage.setItem('ATSearch', searchValue);
     setValue(searchValue);
     if (searchParams) {

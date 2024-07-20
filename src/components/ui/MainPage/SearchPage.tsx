@@ -33,7 +33,9 @@ function SearchPage() {
   };
 
   const navigate = useNavigate();
-  const currPage = useAppSelector((state) => state.counter.value).toString();
+  const currPage = useAppSelector(
+    (state) => state.counter.value || 1
+  ).toString();
 
   const goBack = () => {
     if (result) {
@@ -45,7 +47,7 @@ function SearchPage() {
     const fetchPlanets = async () => {
       try {
         setIsLoading(true);
-        const fetched = await getSearch(valueV, currentPage || 1);
+        const fetched = await getSearch(valueV, currentPage);
         setPlanets(fetched);
       } catch (error) {
         <p>error</p>;
