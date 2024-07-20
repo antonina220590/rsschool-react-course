@@ -12,6 +12,17 @@ export interface IPlanet {
   url: string;
 }
 
+export interface IResponseResult {
+  results: [];
+  name: string;
+  url: string;
+}
+
+export interface Info {
+  page: number;
+  search?: string;
+}
+
 export interface IPlanetMain {
   name: string;
   url: string;

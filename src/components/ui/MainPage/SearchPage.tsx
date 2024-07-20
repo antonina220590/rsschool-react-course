@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Link,
   Outlet,
@@ -12,12 +12,11 @@ import Input from '../input/input';
 import Cards from '../cards/cards';
 import { IPlanetMain } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
-import { getSearch } from '../../api/api';
 import Pagination from '../pagination/pagination';
 import { useAppSelector } from '../../../app/hooks';
+import apiSlice from '../../api/apiSlices';
 
 function SearchPage() {
-  const [planets, setPlanets] = useState<IPlanetMain[] | null>([]);
   const [valueV, setValueV] = useState<string>(
     localStorage.getItem('ATSearch') || ''
   );
@@ -25,7 +24,6 @@ function SearchPage() {
   const [searchParams] = useSearchParams();
   const currentPage = Number(searchParams.get('page'));
 
-  const [isLoading, setIsLoading] = useState(false);
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
   const getMyData = (value: string) => {
@@ -43,20 +41,10 @@ function SearchPage() {
     }
   };
 
-  useEffect(() => {
-    const fetchPlanets = async () => {
-      try {
-        setIsLoading(true);
-        const fetched = await getSearch(valueV, currentPage);
-        setPlanets(fetched);
-      } catch (error) {
-        <p>error</p>;
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchPlanets();
-  }, [valueV, currentPage]);
+  const { data, isFetching } = apiSlice.useGetAllPlanetsQuery({
+    page: currentPage,
+    search: valueV,
+  });
 
   return (
     <>
@@ -67,7 +55,7 @@ function SearchPage() {
       </div>
       <Pagination />
       <div className={style.cardsWrapper}>
-        {isLoading ? (
+        {isFetching ? (
           <Spinner />
         ) : (
           <div
@@ -75,7 +63,7 @@ function SearchPage() {
             onClick={goBack}
             role="presentation"
           >
-            {planets?.map((planet) => {
+            {data?.results?.map((planet: IPlanetMain) => {
               return (
                 <div className={styles.cardContainer} key={planet.name}>
                   <Link
