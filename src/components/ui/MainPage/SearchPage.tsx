@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Link,
   Outlet,
@@ -17,18 +16,12 @@ import { useAppSelector } from '../../../app/hooks';
 import apiSlice from '../../api/apiSlices';
 
 function SearchPage() {
-  const [valueV, setValueV] = useState<string>(
-    localStorage.getItem('ATSearch') || ''
-  );
-
   const [searchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get('page'));
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const searchVal = useAppSelector((state) => state.search.value);
 
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
-  const getMyData = (value: string) => {
-    setValueV(localStorage.getItem('ATSearch') || value);
-  };
 
   const navigate = useNavigate();
   const currPage = useAppSelector(
@@ -43,14 +36,14 @@ function SearchPage() {
 
   const { data, isFetching } = apiSlice.useGetAllPlanetsQuery({
     page: currentPage,
-    search: valueV,
+    search: searchVal,
   });
 
   return (
     <>
       <div className={style.headerWrapper} onClick={goBack} role="presentation">
         <div>
-          <Input onClick={getMyData} />
+          <Input />
         </div>
       </div>
       <Pagination />

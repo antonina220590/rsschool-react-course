@@ -1,19 +1,23 @@
-// import { createSlice } from '@reduxjs/toolkit';
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
-// interface SearchState {
-//   value: string;
-// }
+interface SearchValue {
+  value: string;
+}
 
-// const initialState: SearchState = {
-//   value: '',
-// };
+const initialState: SearchValue = {
+  value: '',
+};
 
-// export const planetSearchSlice = createSlice({
-//   name: 'counter',
-//   initialState,
-//   reducers: {
-//     incremented(state) {},
-//   },
-// });
+export const planetSearchSlice = createSlice({
+  name: 'search',
+  initialState,
+  reducers: {
+    setSearch: (state, action) => {
+      state.value = action.payload;
+    },
+  },
+});
 
+export const { setSearch } = planetSearchSlice.actions;
 export default planetSearchSlice.reducer;

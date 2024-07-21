@@ -1,41 +1,30 @@
-import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { reset } from '../../utils/counterSlice';
+import { setSearch } from '../../utils/searchSlice';
 import style from './input.module.css';
 
-type InputProps = {
-  onClick: (arg: string) => void;
-};
-
-function Input({ onClick }: InputProps) {
-  const [searchValue, setSearchValue] = useState<string>(
-    localStorage.getItem('ATSearch') || ''
-  );
-  const [value, setValue] = useState<string>(
-    localStorage.getItem('ATSearch') || ''
-  );
-
+function Input() {
   const dispatch = useAppDispatch();
   const currPage = useAppSelector((state) => state.counter.value).toString();
+  const searchVal = useAppSelector((state) => state.search.value);
+  let currVal: string = '';
 
   const [searchParams, setSearchParams] = useSearchParams();
+
   const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setSearchValue(event.target.value);
+    currVal = event.target.value;
   };
 
   const getData = () => {
-    if (searchValue) {
+    dispatch(setSearch(currVal));
+    if (searchVal) {
       dispatch(reset());
     }
-    localStorage.setItem('ATSearch', searchValue);
-    setValue(searchValue);
     if (searchParams) {
-      setSearchParams({ search: searchValue, page: currPage });
+      setSearchParams({ search: searchVal, page: currPage });
     }
-
-    onClick(value);
   };
 
   return (
@@ -45,7 +34,6 @@ function Input({ onClick }: InputProps) {
         id="input"
         name="search"
         type="text"
-        value={searchValue}
         onChange={handleSearchValue}
         placeholder="search....."
       />
