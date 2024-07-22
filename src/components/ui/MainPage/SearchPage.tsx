@@ -51,14 +51,11 @@ function SearchPage() {
         {isFetching ? (
           <Spinner />
         ) : (
-          <div
-            className={style.commonWrapper}
-            onClick={goBack}
-            role="presentation"
-          >
+          <div className={style.commonWrapper}>
             {data?.results?.map((planet: IPlanetMain) => {
               return (
                 <div className={styles.cardContainer} key={planet.name}>
+                  <Cards name={planet.name} url={planet.url} />
                   <Link
                     className={style.link}
                     to={`/planet/:${planet.url.split('/')[5]}/?page=${currPage}`}
@@ -67,7 +64,9 @@ function SearchPage() {
                     }
                     onClickCapture={goBack}
                   >
-                    <Cards name={planet.name} url={planet.url} />
+                    <button className={style.learnMoreBtn} type="button">
+                      Learn More
+                    </button>
                   </Link>
                 </div>
               );

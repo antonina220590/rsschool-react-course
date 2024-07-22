@@ -10,8 +10,6 @@ function CardDetails() {
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
 
-  // const [planet, setPlanet] = useState<IPlanet>();
-  // const [isLoading, setIsLoading] = useState(false);
   const currPage = useAppSelector((state) => state.counter.value).toString();
 
   const navigate = useNavigate();
@@ -43,7 +41,7 @@ function CardDetails() {
               alt="planet"
             />
           </div>
-          <div className={style.cardInfo}>
+          <div className={styles.cardInfo}>
             <h3 className={style.cardTitle}>{planet?.name}</h3>
             <p className={style.cardDescription}>
               Rotation Period:{' '}
