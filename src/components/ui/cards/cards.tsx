@@ -1,16 +1,24 @@
 import style from './cards.module.css';
-import { IPlanetMain } from '../../utils/interface';
+import { IPlanet } from '../../utils/interface';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { addToFav, deleteFromFav } from '../../utils/favouritesSlice';
 import apiSlice from '../../api/apiSlices';
 import Spinner from '../spinner/spinner';
 
-function Cards({ name, url }: IPlanetMain) {
+function Cards({ name, url }: IPlanet) {
   const list = useAppSelector((state) => state.favourites);
   const dispatch = useAppDispatch();
   const { data: planet, isFetching } = apiSlice.useGetPlanetQuery(
-    +url.split('/')[5]
+    Number(url?.split('/')[5])
   );
+
+  const handleList = () => {
+    if (!list.find((obj: IPlanet) => obj.name === name)) {
+      dispatch(addToFav(planet));
+    } else {
+      dispatch(deleteFromFav({ title: planet?.name }));
+    }
+  };
 
   return (
     <div className={style.cardImageBox}>
@@ -20,7 +28,7 @@ function Cards({ name, url }: IPlanetMain) {
         <>
           <img
             className={style.cardImage}
-            src={`https://starwars-visualguide.com/assets/img/planets/${url.split('/')[5]}.jpg`}
+            src={`https://starwars-visualguide.com/assets/img/planets/${url?.split('/')[5]}.jpg`}
             onError={({ currentTarget }) => {
               const newTarget = currentTarget;
               newTarget.onerror = null;
@@ -34,26 +42,26 @@ function Cards({ name, url }: IPlanetMain) {
             <div
               title="Like"
               className={style.heartContainer}
-              id={name}
+              id={url?.split('/')[5]}
               role="presentation"
+              onClick={() => handleList()}
             >
-              {list.includes(name) ? (
+              {!list.find((obj: IPlanet) => obj.name === name) ? (
                 <input
-                  id={url}
-                  defaultChecked
+                  id={url?.split('/')[5]}
                   className={style.checkbox}
                   type="checkbox"
-                  onClick={() => dispatch(deleteFromFav({ title: name }))}
+                  value={name}
                 />
               ) : (
                 <input
-                  id={url}
+                  id={url?.split('/')[5]}
+                  defaultChecked
                   className={style.checkbox}
                   type="checkbox"
-                  onClick={() => dispatch(addToFav(planet?.name))}
+                  value={name}
                 />
               )}
-
               <div className={style.svgContainer}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

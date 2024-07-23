@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { IPlanet } from './interface';
 
-const initialState: string[] = [];
+const initialState: object[] = [];
 
 export const favouritesSlice = createSlice({
   name: 'favourites',
@@ -11,7 +12,10 @@ export const favouritesSlice = createSlice({
     },
     deleteFromFav: (state, action) => {
       const { title } = action.payload;
-      return state.filter((planet) => planet !== title);
+      if (state.length) {
+        return state.filter((planet: IPlanet) => planet.name !== title);
+      }
+      return state.splice(0, state.length);
     },
   },
 });

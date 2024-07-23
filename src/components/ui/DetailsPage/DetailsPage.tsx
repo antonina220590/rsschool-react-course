@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './details-page.module.css';
 import style from '../cards/cards.module.css';
@@ -31,7 +30,7 @@ function CardDetails() {
             {' '}
             <img
               className={styles.cardImageDetails}
-              src={`https://starwars-visualguide.com/assets/img/planets/${planet?.url.split('/')[5]}.jpg`}
+              src={`https://starwars-visualguide.com/assets/img/planets/${planet?.url?.split('/')[5]}.jpg`}
               onError={({ currentTarget }) => {
                 const newTarget = currentTarget;
                 newTarget.onerror = null;
