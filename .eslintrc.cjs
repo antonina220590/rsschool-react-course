@@ -30,6 +30,7 @@ module.exports = {
     'react-compiler/react-compiler': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     'class-methods-use-this': 'off',
+    'no-param-reassign': ['error', { props: false }],
     'prettier/prettier': [
       'error',
       {

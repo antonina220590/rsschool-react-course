@@ -33,21 +33,22 @@ export default function Flyout() {
     <div
       className={list.length ? style.flyoutWarpper_active : style.flyoutWarpper}
     >
+      <button type="button" className={style.button} onClick={deleteAllFrom}>
+        Unselect All
+      </button>
       <span className={style.text}>
         {list.length} items added to favourites
       </span>
-      <div className={style.buttons}>
-        <button type="button" className={style.button} onClick={deleteAllFrom}>
-          Unselect All
-        </button>
-        <a
-          className={style.button}
-          href={objectUrl}
-          download={`planets_${list.length}.csv`}
-        >
-          Download
-        </a>
-      </div>
+      {/* <div className={style.buttons}> */}
+
+      <a
+        className={style.button}
+        href={objectUrl}
+        download={`${list.length}_planets.csv`}
+      >
+        Download
+      </a>
     </div>
+    // </div>
   );
 }

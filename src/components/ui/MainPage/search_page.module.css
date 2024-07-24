@@ -15,6 +15,23 @@
   margin-top: 30px;
 }
 
+.headerWrapperLight {
+  display: flex;
+  width: 1320px;
+  margin: 0 auto;
+  background: rgba(28, 28, 28, 0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.5);
+  backdrop-filter: blur(5.5px);
+  -webkit-backdrop-filter: blur(5.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 100px;
+  margin-top: 30px;
+}
+
 .cardsWrapper {
   display: flex;
   width: 1320px;
