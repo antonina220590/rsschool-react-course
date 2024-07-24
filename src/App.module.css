@@ -6,6 +6,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
+  align-items: center;
 }
 
 .wrapperLight {
@@ -16,6 +17,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
+  align-items: center;
 }
 
 .header {
@@ -23,19 +25,20 @@
   padding: 15px 0;
 }
 
-button {
-  padding: 10px;
+.themeBtnBox {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 10px;
+  width: 500px;
+  background: rgba(155, 155, 155, 0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.5);
+  backdrop-filter: blur(5.5px);
+  -webkit-backdrop-filter: blur(5.5px);
   border-radius: 10px;
-  border: 1px solid;
-  cursor: pointer;
-  font-size: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.darkBtn {
-  background-color: black;
-  color: aliceblue;
-}
-.lightBtn {
-  background-color: aliceblue;
-  color: black;
+.themeLabel {
+  padding: 10px 0;
 }

@@ -49,7 +49,6 @@
 }
 
 .button {
-  width: 150px;
   padding: 7px 15px;
   color: white;
   background-color: #5555ff;
@@ -58,6 +57,7 @@
   font-size: 20px;
   cursor: pointer;
   letter-spacing: 0.7px;
+  border-radius: 5px;
 }
 
 .button:hover {
