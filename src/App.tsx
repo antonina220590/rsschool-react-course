@@ -3,7 +3,7 @@ import SearchPage from './components/ui/MainPage/SearchPage';
 import style from './App.module.css';
 import ErrorBoundary from './components/utils/errorBoundary';
 import Flyout from './components/ui/FlyoutElement/flyout';
-import ThemeBtn from './themeButton';
+import ThemeBtn from './components/ui/themeButton/themeButton';
 import { ThemeContext } from './context/themeContext';
 
 function App() {

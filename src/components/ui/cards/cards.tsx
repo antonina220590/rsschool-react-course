@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import style from './cards.module.css';
 import { IPlanet } from '../../utils/interface';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -6,14 +7,17 @@ import apiSlice from '../../api/apiSlices';
 import Spinner from '../spinner/spinner';
 
 function Cards({ name, url }: IPlanet) {
-  const list = useAppSelector((state) => state.favourites);
+  const list = useAppSelector((state) =>
+    state.favourites.some((item: IPlanet) => name === item.name)
+  );
   const dispatch = useAppDispatch();
   const { data: planet, isFetching } = apiSlice.useGetPlanetQuery(
     Number(url?.split('/')[5])
   );
+  const [checked] = useState(false);
 
   const handleList = () => {
-    if (!list.find((obj: IPlanet) => obj.name === name)) {
+    if (!list) {
       dispatch(addToFav(planet));
     } else {
       dispatch(deleteFromFav({ title: planet?.name }));
@@ -43,25 +47,15 @@ function Cards({ name, url }: IPlanet) {
               title="Like"
               className={style.heartContainer}
               id={url?.split('/')[5]}
-              role="presentation"
-              onClick={() => handleList()}
             >
-              {!list.find((obj: IPlanet) => obj.name === name) ? (
-                <input
-                  id={url?.split('/')[5]}
-                  className={style.checkbox}
-                  type="checkbox"
-                  value={name}
-                />
-              ) : (
-                <input
-                  id={url?.split('/')[5]}
-                  defaultChecked
-                  className={style.checkbox}
-                  type="checkbox"
-                  value={name}
-                />
-              )}
+              <input
+                id={url?.split('/')[5]}
+                className={style.checkbox}
+                type="checkbox"
+                value={name || ''}
+                onChange={() => handleList()}
+                checked={list ? !checked : checked}
+              />
               <div className={style.svgContainer}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
