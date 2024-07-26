@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "prepare": "husky",
     "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.6",
@@ -36,6 +37,7 @@
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "@vitest/coverage-v8": "^2.0.4",
+    "@vitest/ui": "^2.0.4",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
@@ -50,6 +52,7 @@
     "husky": "^9.0.11",
     "jsdom": "^24.1.1",
     "lint-staged": "^15.2.7",
+    "msw": "^2.3.4",
     "prettier": "^3.3.2",
     "typescript": "^5.2.2",
     "vitest": "^2.0.4"

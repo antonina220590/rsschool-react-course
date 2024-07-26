@@ -39,7 +39,6 @@ export default function Flyout() {
       <span className={style.text}>
         {list.length} items added to favourites
       </span>
-      {/* <div className={style.buttons}> */}
 
       <a
         className={style.button}
@@ -49,6 +48,5 @@ export default function Flyout() {
         Download
       </a>
     </div>
-    // </div>
   );
 }

@@ -12,7 +12,15 @@ import {
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: [{ find: '§', replacement: resolve(__dirname, './src/') }],
+    alias: [
+      {
+        find: 'react-redux/es/exports',
+        replacement: resolve(
+          __dirname,
+          './node_modules/react-redux/lib/exports'
+        ),
+      },
+    ],
   },
   test: {
     globals: true,
