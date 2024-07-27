@@ -1,10 +1,4 @@
-import {
-  Link,
-  Outlet,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
@@ -16,10 +10,7 @@ import { useAppSelector } from '../../../app/hooks';
 import apiSlice from '../../api/apiSlices';
 
 function SearchPage() {
-  const [searchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
   const searchVal = useAppSelector((state) => state.search.value);
-
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
 
@@ -35,7 +26,7 @@ function SearchPage() {
   };
 
   const { data, isFetching } = apiSlice.useGetAllPlanetsQuery({
-    page: currentPage,
+    page: Number(currPage),
     search: searchVal,
   });
 
