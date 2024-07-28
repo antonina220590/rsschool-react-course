@@ -20,10 +20,11 @@ describe('Flyout', () => {
       const heartCheckbox = screen.queryByTestId('heart');
       expect(heartCheckbox).toBeInTheDocument();
     });
+    screen.debug();
 
     const heartCheckbox = screen.getByTestId('heart');
     expect(heartCheckbox).toBeInTheDocument();
-    fireEvent.change(heartCheckbox);
+    fireEvent.change(heartCheckbox, { target: { checked: true } });
 
     const unselectBtn = await screen.findByTestId('unselect');
     expect(unselectBtn).toBeInTheDocument();

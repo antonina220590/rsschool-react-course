@@ -11,6 +11,7 @@ function App() {
   return (
     <div
       className={`${darkTheme === 'dark' ? style.wrapperDark : style.wrapperLight}`}
+      data-testid="theme"
     >
       <ErrorBoundary>
         <ThemeBtn />

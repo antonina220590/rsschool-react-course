@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { reset } from '../../utils/counterSlice';
@@ -8,12 +9,12 @@ function Input() {
   const dispatch = useAppDispatch();
   const currPage = useAppSelector((state) => state.counter.value).toString();
   const searchVal = useAppSelector((state) => state.search.value || '');
-  let currVal: string = '';
+  const [currVal, setCurVall] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    currVal = event.target.value;
+    setCurVall(event.target.value);
   };
 
   const getData = () => {
