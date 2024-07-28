@@ -37,8 +37,14 @@ function Input() {
         type="text"
         onChange={handleSearchValue}
         placeholder="search....."
+        data-testid="search-input"
       />
-      <button className={style.searchBtn} type="submit" onClick={getData}>
+      <button
+        className={style.searchBtn}
+        type="submit"
+        onClick={getData}
+        data-testid="search"
+      >
         Search
       </button>
     </div>

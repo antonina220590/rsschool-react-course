@@ -45,7 +45,11 @@ function SearchPage() {
           <div className={style.commonWrapper}>
             {data?.results?.map((planet: IPlanetMain) => {
               return (
-                <div className={styles.cardContainer} key={planet.name}>
+                <div
+                  className={styles.cardContainer}
+                  key={planet.name}
+                  data-testid={planet.name}
+                >
                   <Cards name={planet.name} url={planet.url} />
                   <Link
                     className={style.link}
