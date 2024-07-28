@@ -49,6 +49,7 @@ function Cards({ name, url }: IPlanet) {
               id={url?.split('/')[5]}
             >
               <input
+                data-testid="heart"
                 id={url?.split('/')[5]}
                 className={style.checkbox}
                 type="checkbox"

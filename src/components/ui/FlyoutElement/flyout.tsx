@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { deleteFromFav } from '../../utils/favouritesSlice';
 import { IPlanet } from '../../utils/interface';
 import style from './flyout.module.css';
+import DownloadButton from './downloadBtn';
 
 export default function Flyout() {
   const list = useAppSelector((state) => state.favourites);
@@ -13,40 +14,23 @@ export default function Flyout() {
     });
   };
 
-  let csvFile = '';
-
-  if (list.length) {
-    const titles = Object.keys(list[0]);
-    const array = [];
-    array.push(titles);
-    list.forEach((item) => {
-      array.push(Object.values(item));
-    });
-    array.forEach((data) => {
-      csvFile += `${data.join(',')}\n`;
-    });
-  }
-  const blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8,' });
-  const objectUrl = URL.createObjectURL(blob);
-
   return (
     <div
       className={list.length ? style.flyoutWarpper_active : style.flyoutWarpper}
+      data-testid="text"
     >
-      <button type="button" className={style.button} onClick={deleteAllFrom}>
+      <button
+        type="button"
+        className={style.button}
+        onClick={deleteAllFrom}
+        data-testid="unselect"
+      >
         Unselect All
       </button>
       <span className={style.text}>
         {list.length} items added to favourites
       </span>
-
-      <a
-        className={style.button}
-        href={objectUrl}
-        download={`${list.length}_planets.csv`}
-      >
-        Download
-      </a>
+      {list.length >= 1 ? <DownloadButton /> : null}
     </div>
   );
 }

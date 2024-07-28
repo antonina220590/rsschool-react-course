@@ -49,14 +49,20 @@ function Pagination() {
         className={page === 1 ? style.btn_disabled : style.prevBtn}
         type="button"
         onClick={decreasePage}
+        data-testid="prev-button"
+        disabled={page === 1}
       >
         Prev
       </button>
-      <div className={style.page}>{page}</div>
+      <div className={style.page} data-testid="curr-page">
+        {page}
+      </div>
       <button
         className={page > 5 ? style.btn_disabled : style.nextBtn}
         type="button"
         onClick={increasePage}
+        data-testid="next-button"
+        disabled={page > 5}
       >
         Next
       </button>

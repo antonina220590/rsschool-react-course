@@ -10,5 +10,5 @@
     "noEmit": true
   },
   "include": ["vite.config.ts"],
-  "exclude": ["node_modules", "__tests__"]
+  "exclude": ["node_modules", "__tests__", "./src/test/setup.ts/**"]
 }

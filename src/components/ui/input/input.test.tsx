@@ -6,13 +6,14 @@ import renderWithProviders from '../../utils/test-utils';
 import SearchPage from '../MainPage/SearchPage';
 
 export const handlers = [
-  http.get('https://swapi.dev/api/planets/1', async () => {
+  http.get('https://swapi.dev/api/planets/*', async () => {
     await delay(150);
     return HttpResponse.json('1');
   }),
 ];
 
 const server = setupServer(...handlers);
+
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -27,7 +28,7 @@ describe('search input functionality', () => {
     const searchInput = screen.getByTestId('search-input');
     fireEvent.change(searchInput, { target: { value: 'Tatooine' } });
     const searchBtn = screen.getByTestId('search');
-    fireEvent.submit(searchBtn);
+    fireEvent.click(searchBtn);
 
     const item = await screen.findByText(/Tatooine/i);
     expect(item).toBeInTheDocument();
