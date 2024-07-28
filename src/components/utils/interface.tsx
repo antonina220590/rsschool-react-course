@@ -1,18 +1,26 @@
 import { ReactElement } from 'react';
 
 export interface IPlanet {
-  climate: string;
-  // created: Date;
-  diameter: string;
-  // edited: Date;
-  gravity: string;
+  climate?: string;
+  diameter?: string;
+  gravity?: string;
+  name?: string;
+  orbital_period?: string;
+  population?: string;
+  rotation_period?: string;
+  terrain?: string;
+  url?: string;
+}
+
+export interface IResponseResult {
+  results: [];
   name: string;
-  orbital_period: string;
-  population: string;
-  rotation_period: string;
-  // surfaceWater: string;
-  terrain: string;
   url: string;
+}
+
+export interface Info {
+  page: number;
+  search?: string;
 }
 
 export interface IPlanetMain {

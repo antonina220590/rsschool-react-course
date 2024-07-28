@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
@@ -6,94 +5,63 @@ import Input from '../input/input';
 import Cards from '../cards/cards';
 import { IPlanetMain } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
-import { getSearch } from '../../api/api';
-import Pagination from '../../pagination/pagination';
+import Pagination from '../pagination/pagination';
+import { useAppSelector } from '../../../app/hooks';
+import apiSlice from '../../api/apiSlices';
 
 function SearchPage() {
-  const [planets, setPlanets] = useState<IPlanetMain[] | null>([]);
-  const [valueV, setValueV] = useState<string>(
-    localStorage.getItem('ATSearch') || ''
-  );
-
-  const [pageNum, setPageNum] = useState<number>(() =>
-    Number(localStorage.getItem('ATPage') || 1)
-  );
-
-  const [isLoading, setIsLoading] = useState(false);
+  const searchVal = useAppSelector((state) => state.search.value);
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
 
-  const getMyPage = () => {
-    setPageNum(Number(localStorage.getItem('ATPage') || 0));
-  };
-
-  const changePage = () => {
-    if (localStorage.getItem('ATSearch')?.length) {
-      setPageNum(1);
-    }
-  };
-
-  const getMyData = (value: string) => {
-    setValueV(localStorage.getItem('ATSearch') || value);
-    changePage();
-  };
-
   const navigate = useNavigate();
+  const currPage = useAppSelector(
+    (state) => state.counter.value || 1
+  ).toString();
 
   const goBack = () => {
     if (result) {
-      navigate('/');
+      navigate(`/?page=${currPage}`);
     }
   };
 
-  useEffect(() => {
-    const fetchPlanets = async () => {
-      try {
-        setIsLoading(true);
-        const fetched = await getSearch(valueV, pageNum);
-        setPlanets(fetched);
-      } catch (error) {
-        <p>error</p>;
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchPlanets();
-  }, [valueV, pageNum]);
+  const { data, isFetching } = apiSlice.useGetAllPlanetsQuery({
+    page: Number(currPage),
+    search: searchVal,
+  });
 
   return (
     <>
       <div className={style.headerWrapper} onClick={goBack} role="presentation">
         <div>
-          <Input onClick={getMyData} />
+          <Input />
         </div>
       </div>
-      <Pagination
-        onClickDecrease={getMyPage}
-        onClickIncrease={getMyPage}
-        onClick={changePage}
-      />
+      <Pagination />
       <div className={style.cardsWrapper}>
-        {isLoading ? (
+        {isFetching ? (
           <Spinner />
         ) : (
-          <div
-            className={style.commonWrapper}
-            onClick={goBack}
-            role="presentation"
-          >
-            {planets?.map((planet) => {
+          <div className={style.commonWrapper}>
+            {data?.results?.map((planet: IPlanetMain) => {
               return (
-                <div className={styles.cardContainer} key={planet.name}>
+                <div
+                  className={styles.cardContainer}
+                  key={planet.name}
+                  data-testid={planet.name}
+                >
+                  <Cards name={planet.name} url={planet.url} />
                   <Link
                     className={style.link}
-                    to={`/planet/:${planet.url.split('/')[5]}`}
+                    to={`/planet/:${planet.url.split('/')[5]}/?page=${currPage}`}
                     onClick={() =>
                       navigate(`/planet/:${planet.url.split('/')[5]}`)
                     }
                     onClickCapture={goBack}
                   >
-                    <Cards name={planet.name} url={planet.url} />
+                    <button className={style.learnMoreBtn} type="button">
+                      Learn More
+                    </button>
                   </Link>
                 </div>
               );

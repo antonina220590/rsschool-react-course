@@ -1,42 +1,28 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IPlanet } from '../../utils/interface';
 import styles from './details-page.module.css';
 import style from '../cards/cards.module.css';
-import { getPlanet } from '../../api/api';
 import Spinner from '../spinner/spinner';
+import { useAppSelector } from '../../../app/hooks';
+import apiSlice from '../../api/apiSlices';
 
 function CardDetails() {
   const { planetId } = useParams();
   const result = Number(planetId?.slice(1));
 
-  const [planet, setPlanet] = useState<IPlanet>();
-  const [isLoading, setIsLoading] = useState(false);
+  const currPage = useAppSelector((state) => state.counter.value).toString();
 
   const navigate = useNavigate();
 
   const closeCard = () => {
-    navigate('/');
+    if (result) {
+      navigate(`/?page=${currPage}`);
+    }
   };
 
-  useEffect(() => {
-    const fetchPlanets = async () => {
-      try {
-        setIsLoading(true);
-        const fetched = await getPlanet(result);
-        setPlanet(fetched);
-      } catch (error) {
-        <p>error</p>;
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchPlanets();
-  }, [result]);
-
+  const { data: planet, isFetching } = apiSlice.useGetPlanetQuery(result);
   return (
     <div className={styles.detailsDiv}>
-      {isLoading ? (
+      {isFetching ? (
         <Spinner />
       ) : (
         <>
@@ -44,7 +30,7 @@ function CardDetails() {
             {' '}
             <img
               className={styles.cardImageDetails}
-              src={`https://starwars-visualguide.com/assets/img/planets/${planet?.url.split('/')[5]}.jpg`}
+              src={`https://starwars-visualguide.com/assets/img/planets/${planet?.url?.split('/')[5]}.jpg`}
               onError={({ currentTarget }) => {
                 const newTarget = currentTarget;
                 newTarget.onerror = null;
@@ -54,7 +40,7 @@ function CardDetails() {
               alt="planet"
             />
           </div>
-          <div className={style.cardInfo}>
+          <div className={styles.cardInfo}>
             <h3 className={style.cardTitle}>{planet?.name}</h3>
             <p className={style.cardDescription}>
               Rotation Period:{' '}

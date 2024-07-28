@@ -16,6 +16,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: ['./tsconfig.json', './tsconfig.app.json', './tsconfig.node.json'],
+    exclude: ['setup.ts'],
     tsconfigRootDir: __dirname,
     ecmaFeatures: {
       jsx: true,
@@ -30,6 +31,15 @@ module.exports = {
     'react-compiler/react-compiler': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     'class-methods-use-this': 'off',
+    'import/no-extraneous-dependencies': [
+      'off',
+      {
+        devDependencies: false,
+        optionalDependencies: false,
+        peerDependencies: false,
+      },
+    ],
+    'no-param-reassign': ['error', { props: false }],
     'prettier/prettier': [
       'error',
       {

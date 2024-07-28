@@ -1,32 +1,32 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { reset } from '../../utils/counterSlice';
+import { setSearch } from '../../utils/searchSlice';
 import style from './input.module.css';
 
-type InputProps = {
-  onClick: (arg: string) => void;
-};
-
-function Input({ onClick }: InputProps) {
-  const [searchValue, setSearchValue] = useState<string>(
-    localStorage.getItem('ATSearch') || ''
-  );
-  const [value, setValue] = useState<string>(
-    localStorage.getItem('ATSearch') || ''
-  );
-
+function Input() {
+  const dispatch = useAppDispatch();
+  const currPage = useAppSelector((state) => state.counter.value).toString();
+  const searchVal = useAppSelector((state) => state.search.value || '');
+  const [currVal, setCurVall] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
+
   const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setSearchValue(event.target.value);
+    setCurVall(event.target.value);
   };
 
   const getData = () => {
-    localStorage.setItem('ATSearch', searchValue);
-    setValue(searchValue);
-    if (searchParams) {
-      setSearchParams({ search: searchValue });
+    if (currPage !== '1') {
+      dispatch(reset());
     }
-    onClick(value);
+    if (searchVal !== currVal) {
+      dispatch(setSearch(currVal));
+    }
+    if (searchParams) {
+      setSearchParams({ search: currVal, page: currPage });
+    }
   };
 
   return (
@@ -36,11 +36,16 @@ function Input({ onClick }: InputProps) {
         id="input"
         name="search"
         type="text"
-        value={searchValue}
         onChange={handleSearchValue}
         placeholder="search....."
+        data-testid="search-input"
       />
-      <button className={style.searchBtn} type="submit" onClick={getData}>
+      <button
+        className={style.searchBtn}
+        type="submit"
+        onClick={getData}
+        data-testid="search"
+      >
         Search
       </button>
     </div>
