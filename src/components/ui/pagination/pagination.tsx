@@ -1,5 +1,5 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../appStore/hooks';
 import { incremented, decremented } from '../../utils/counterSlice';
 import style from './pagination.module.css';
 

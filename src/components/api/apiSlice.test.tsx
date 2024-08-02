@@ -1,4 +1,4 @@
-import { setupStore } from '../../app/store';
+import { setupStore } from '../../appStore/store';
 import apiSlice from './apiSlices';
 
 const { getAllPlanets, getPlanet } = apiSlice.endpoints;

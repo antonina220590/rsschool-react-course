@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../appStore/hooks';
 import { deleteFromFav } from '../../utils/favouritesSlice';
 import { IPlanet } from '../../utils/interface';
 import style from './flyout.module.css';

@@ -1,29 +1,30 @@
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+// import { useRouter } from 'next/router';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
 import Cards from '../cards/cards';
 import { IPlanetMain } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
-import Pagination from '../pagination/pagination';
-import { useAppSelector } from '../../../app/hooks';
+
+// import Pagination from '../pagination/pagination';
+import { useAppSelector } from '../../../appStore/hooks';
 import apiSlice from '../../api/apiSlices';
 
 function SearchPage() {
   const searchVal = useAppSelector((state) => state.search.value);
-  const { planetId } = useParams();
-  const result = Number(planetId?.slice(1));
+  // const { planetId } = useParams();
+  // const result = Number(planetId?.slice(1));
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const currPage = useAppSelector(
     (state) => state.counter.value || 1
   ).toString();
 
-  const goBack = () => {
-    if (result) {
-      navigate(`/?page=${currPage}`);
-    }
-  };
+  // const goBack = () => {
+  //   if (result) {
+  //     navigate(`/?page=${currPage}`);
+  //   }
+  // };
 
   const { data, isFetching } = apiSlice.useGetAllPlanetsQuery({
     page: Number(currPage),
@@ -32,12 +33,12 @@ function SearchPage() {
 
   return (
     <>
-      <div className={style.headerWrapper} onClick={goBack} role="presentation">
+      <div className={style.headerWrapper}>
         <div>
           <Input />
         </div>
       </div>
-      <Pagination />
+      {/* <Pagination /> */}
       <div className={style.cardsWrapper}>
         {isFetching ? (
           <Spinner />
@@ -51,7 +52,7 @@ function SearchPage() {
                   data-testid={planet.name}
                 >
                   <Cards name={planet.name} url={planet.url} />
-                  <Link
+                  {/* <Link
                     className={style.link}
                     to={`/planet/:${planet.url.split('/')[5]}/?page=${currPage}`}
                     onClick={() =>
@@ -62,13 +63,13 @@ function SearchPage() {
                     <button className={style.learnMoreBtn} type="button">
                       Learn More
                     </button>
-                  </Link>
+                  </Link> */}
                 </div>
               );
             })}
           </div>
         )}
-        <Outlet />
+        {/* <Outlet /> */}
       </div>
     </>
   );

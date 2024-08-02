@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './details-page.module.css';
 import style from '../cards/cards.module.css';
 import Spinner from '../spinner/spinner';
-import { useAppSelector } from '../../../app/hooks';
+import { useAppSelector } from '../../../appStore/hooks';
 import apiSlice from '../../api/apiSlices';
 
 function CardDetails() {

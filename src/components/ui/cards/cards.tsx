@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import style from './cards.module.css';
 import { IPlanet } from '../../utils/interface';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../appStore/hooks';
 import { addToFav, deleteFromFav } from '../../utils/favouritesSlice';
 import apiSlice from '../../api/apiSlices';
 import Spinner from '../spinner/spinner';

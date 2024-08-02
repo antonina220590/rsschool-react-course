@@ -1,16 +1,28 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../appStore/hooks';
 import { reset } from '../../utils/counterSlice';
 import { setSearch } from '../../utils/searchSlice';
 import style from './input.module.css';
 
 function Input() {
+  const router = useRouter();
+  const { query } = router;
+
   const dispatch = useAppDispatch();
   const currPage = useAppSelector((state) => state.counter.value).toString();
   const searchVal = useAppSelector((state) => state.search.value || '');
-  const [currVal, setCurVall] = useState('');
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [currVal, setCurVall] = useState(query.search || '');
+
+  // const updateSearchParams = () => {
+  //   router.push({
+  //     pathname: '/search',
+  //     query: {
+  //       search: currVal,
+  //       page: currPage,
+  //     },
+  //   });
+  // };
 
   const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -24,9 +36,7 @@ function Input() {
     if (searchVal !== currVal) {
       dispatch(setSearch(currVal));
     }
-    if (searchParams) {
-      setSearchParams({ search: currVal, page: currPage });
-    }
+    // updateSearchParams();
   };
 
   return (
