@@ -14,15 +14,15 @@ function Input() {
   const searchVal = useAppSelector((state) => state.search.value || '');
   const [currVal, setCurVall] = useState(query.search || '');
 
-  // const updateSearchParams = () => {
-  //   router.push({
-  //     pathname: '/search',
-  //     query: {
-  //       search: currVal,
-  //       page: currPage,
-  //     },
-  //   });
-  // };
+  const updateSearchParams = () => {
+    router.push({
+      // pathname: '/search',
+      query: {
+        search: currVal,
+        page: currPage,
+      },
+    });
+  };
 
   const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -36,7 +36,7 @@ function Input() {
     if (searchVal !== currVal) {
       dispatch(setSearch(currVal));
     }
-    // updateSearchParams();
+    updateSearchParams();
   };
 
   return (

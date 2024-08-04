@@ -1,26 +1,32 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from '../../../appStore/hooks';
 import { incremented, decremented } from '../../utils/counterSlice';
 import style from './pagination.module.css';
 
 function Pagination() {
   const maxNumPage = 6;
+  const router = useRouter();
+  // const { query } = router;
 
   const page = useAppSelector((state) => state.counter.value);
-
   const dispatch = useAppDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
 
-  const navigate = useNavigate();
-  const { planetId } = useParams();
-  const result = Number(planetId?.slice(1));
+  // const [searchParams, setSearchParams] = useSearchParams();
+
+  // const navigate = useNavigate();
+  // const { planetId } = useParams();
+  // const result = Number(planetId?.slice(1));
 
   const increasePage = () => {
     if (page < maxNumPage) {
       dispatch(incremented());
     }
     const LSPage = (page + 1).toString();
-    setSearchParams({ page: LSPage });
+    router.push({
+      query: {
+        page: LSPage,
+      },
+    });
   };
 
   const decreasePage = () => {
@@ -28,21 +34,24 @@ function Pagination() {
       dispatch(decremented());
     }
     const LSPage = (page - 1).toString();
-    if (searchParams) {
-      setSearchParams({ page: LSPage });
-    }
+    router.push({
+      // pathname: '/page',
+      query: {
+        page: LSPage,
+      },
+    });
   };
 
-  const goBack = () => {
-    if (result) {
-      navigate(`/?page=${page}`);
-    }
-  };
+  // const goBack = () => {
+  //   if (result) {
+  //     navigate(`/?page=${page}`);
+  //   }
+  // };
 
   return (
     <div
       className={style.paginationContainer}
-      onClick={goBack}
+      // onClick={goBack}
       role="presentation"
     >
       <button

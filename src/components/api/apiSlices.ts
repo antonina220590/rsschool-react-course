@@ -23,3 +23,5 @@ const apiSlice = createApi({
 });
 
 export default apiSlice;
+
+export const { getAllPlanets } = apiSlice.endpoints;
