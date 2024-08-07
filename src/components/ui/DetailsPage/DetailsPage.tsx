@@ -2,8 +2,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './details-page.module.css';
 import style from '../cards/cards.module.css';
 import Spinner from '../spinner/spinner';
-import { useAppSelector } from '../../../appStore/hooks';
-import apiSlice from '../../api/apiSlices';
+import { useAppSelector } from '../../../lib/hooks';
+import { apiSlice } from '../../../lib/api/apiSlices';
 
 function CardDetails() {
   const { planetId } = useParams();

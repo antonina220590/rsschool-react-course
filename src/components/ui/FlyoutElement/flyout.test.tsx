@@ -6,7 +6,7 @@ import {
 } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import renderWithProviders from '../../utils/test-utils';
-import App from '../../../App';
+import App from '../../../pages/_app';
 
 describe('Flyout', () => {
   test('should render flyout element', async () => {

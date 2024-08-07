@@ -16,6 +16,8 @@ export interface IResponseResult {
   results: [];
   name: string;
   url: string;
+
+  isFetching?: boolean;
 }
 
 export interface Info {

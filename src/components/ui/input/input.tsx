@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../appStore/hooks';
+import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { reset } from '../../utils/counterSlice';
 import { setSearch } from '../../utils/searchSlice';
 import style from './input.module.css';
@@ -16,7 +16,6 @@ function Input() {
 
   const updateSearchParams = () => {
     router.push({
-      // pathname: '/search',
       query: {
         search: currVal,
         page: currPage,

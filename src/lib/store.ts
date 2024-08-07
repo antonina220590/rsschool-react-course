@@ -1,7 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { createWrapper } from 'next-redux-wrapper';
 import counterReducer from '../components/utils/counterSlice';
 import searchReducer from '../components/utils/searchSlice';
-import apiSlice from '../components/api/apiSlices';
+import { apiSlice } from './api/apiSlices';
 import favouritesReducer from '../components/utils/favouritesSlice';
 
 const rootReducer = combineReducers({
@@ -11,14 +12,14 @@ const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
-export const setupStore = (preloadedState?: Partial<RootState>) =>
+export const makeStore = () =>
   configureStore({
     reducer: rootReducer,
-    preloadedState,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),
   });
 
-export type RootState = ReturnType<typeof rootReducer>;
-export type AppStore = ReturnType<typeof setupStore>;
+export type AppStore = ReturnType<typeof makeStore>;
+export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];
+export const wrapper = createWrapper<AppStore>(makeStore, { debug: true });

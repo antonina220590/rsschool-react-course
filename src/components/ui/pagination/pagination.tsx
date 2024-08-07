@@ -1,12 +1,13 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAppSelector, useAppDispatch } from '../../../appStore/hooks';
-import { incremented, decremented } from '../../utils/counterSlice';
+import { useAppSelector, useAppDispatch } from '../../../lib/hooks';
+import { incremented, decremented, setPage } from '../../utils/counterSlice';
 import style from './pagination.module.css';
 
 function Pagination() {
   const maxNumPage = 6;
   const router = useRouter();
-  // const { query } = router;
+  const { query } = router;
 
   const page = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
@@ -17,29 +18,44 @@ function Pagination() {
   // const { planetId } = useParams();
   // const result = Number(planetId?.slice(1));
 
+  // const fetchPlanets = (newPage: number) => {
+  //   dispatch(setPage(newPage));
+  //   router.push(`/?page=${newPage}`, undefined, { shallow: true });
+  // };
+
+  useEffect(() => {
+    const pageFromQuery = parseInt(router.query.page as string, 10);
+    if (pageFromQuery && pageFromQuery !== page) {
+      dispatch(setPage(pageFromQuery));
+    }
+  }, [router.query.page, page, dispatch]);
+
+  const updateQuery = (newPage: number) => {
+    dispatch(setPage(newPage));
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, page: newPage.toString() },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   const increasePage = () => {
     if (page < maxNumPage) {
+      const nextPage = page + 1;
       dispatch(incremented());
+      updateQuery(nextPage);
     }
-    const LSPage = (page + 1).toString();
-    router.push({
-      query: {
-        page: LSPage,
-      },
-    });
   };
 
   const decreasePage = () => {
     if (page > 1) {
+      const prevPage = page - 1;
       dispatch(decremented());
+      updateQuery(prevPage);
     }
-    const LSPage = (page - 1).toString();
-    router.push({
-      // pathname: '/page',
-      query: {
-        page: LSPage,
-      },
-    });
   };
 
   // const goBack = () => {
@@ -55,7 +71,9 @@ function Pagination() {
       role="presentation"
     >
       <button
-        className={page === 1 ? style.btn_disabled : style.prevBtn}
+        className={
+          +(query.page || page) === 1 ? style.btn_disabled : style.prevBtn
+        }
         type="button"
         onClick={decreasePage}
         data-testid="prev-button"
@@ -64,7 +82,7 @@ function Pagination() {
         Prev
       </button>
       <div className={style.page} data-testid="curr-page">
-        {page}
+        {query.page || page}
       </div>
       <button
         className={page > 5 ? style.btn_disabled : style.nextBtn}

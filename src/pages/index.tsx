@@ -1,51 +1,68 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/function-component-definition */
 import { GetServerSideProps } from 'next';
 import { Provider } from 'react-redux';
-import { setupStore } from '../appStore/store';
-import SearchPage from '../components/ui/MainPage/SearchPage';
-import { getAllPlanets } from '../components/api/apiSlices';
-
-interface SearchPageProps {
-  initialData: object;
-  currPage: number;
-}
+import { makeStore } from '../lib/store';
+import SearchPage, {
+  SearchPageProps,
+} from '../components/ui/MainPage/SearchPage';
+import { getAllPlanets } from '../lib/api/apiSlices';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const store = setupStore();
+  const store = makeStore();
   const { query } = context;
   const page = query.page ? Number(query.page) : 1;
   await store.dispatch(getAllPlanets.initiate({ page, search: '' }));
+  // console.log('page', query.page);
 
   const state = store.getState();
+  // console.log('state', state);
   const result =
     state.api.queries[`getAllPlanets({"page":${page},"search":""})`];
 
   return {
     props: {
-      initialData: result?.data || {},
+      initialData: result?.data,
       currPage: page,
     },
   };
 };
 
 const Home: React.FC<SearchPageProps> = (props) => {
-  const store = setupStore(props.initialData);
   return (
-    <Provider store={store}>
+    <Provider store={makeStore()}>
       <SearchPage {...props} />
     </Provider>
   );
 };
 
-function HomeWrapper(props: object) {
+const HomeWrapper: React.FC<SearchPageProps> = (props) => {
   return (
-    <Provider store={setupStore()}>
-      <Home initialData={props} currPage={0} {...props} />
+    <Provider store={makeStore()}>
+      <Home {...props} />
     </Provider>
   );
-}
+};
 
 export default HomeWrapper;
+
+// const Home: React.FC<SearchPageProps> = (props) => {
+//   console.log(props);
+//   const store = makeStore();
+//   return (
+//     <Provider store={store}>
+//       <SearchPage {...props} />
+//     </Provider>
+//   );
+// };
+
+// function HomeWrapper(props: SearchPageProps) {
+//   console.log('test', props);
+//   return (
+//     <Provider store={makeStore()}>
+//       <Home {...props} />
+//     </Provider>
+//   );
+// }
+
+// export default HomeWrapper;

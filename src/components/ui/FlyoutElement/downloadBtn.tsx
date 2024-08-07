@@ -1,4 +1,4 @@
-import { useAppSelector } from '../../../appStore/hooks';
+import { useAppSelector } from '../../../lib/hooks';
 import style from './flyout.module.css';
 
 export default function DownloadButton() {
