@@ -1,24 +1,17 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
-import { reset } from '../../utils/counterSlice';
-import { setSearch } from '../../utils/searchSlice';
 import style from './input.module.css';
 
 function Input() {
   const router = useRouter();
   const { query } = router;
-
-  const dispatch = useAppDispatch();
-  const currPage = useAppSelector((state) => state.counter.value).toString();
-  const searchVal = useAppSelector((state) => state.search.value || '');
   const [currVal, setCurVall] = useState(query.search || '');
 
   const updateSearchParams = () => {
     router.push({
       query: {
         search: currVal,
-        page: currPage,
+        page: 1,
       },
     });
   };
@@ -29,12 +22,6 @@ function Input() {
   };
 
   const getData = () => {
-    if (currPage !== '1') {
-      dispatch(reset());
-    }
-    if (searchVal !== currVal) {
-      dispatch(setSearch(currVal));
-    }
     updateSearchParams();
   };
 

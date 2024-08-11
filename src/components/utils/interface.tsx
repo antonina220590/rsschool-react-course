@@ -13,11 +13,12 @@ export interface IPlanet {
 }
 
 export interface IResponseResult {
-  results: [];
+  results: IPlanet[];
   name: string;
   url: string;
-
   isFetching?: boolean;
+
+  id?: string;
 }
 
 export interface Info {

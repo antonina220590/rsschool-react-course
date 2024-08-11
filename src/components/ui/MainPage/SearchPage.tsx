@@ -1,39 +1,26 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/function-component-definition */
-// // import { useRouter } from 'next/router';
-
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
 import Input from '../input/input';
 import Cards from '../cards/cards';
-import { IPlanetMain, IResponseResult } from '../../utils/interface';
+import { IResponseResult } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
-import { useAppSelector } from '../../../lib/hooks';
-import { apiSlice, useGetAllPlanetsQuery } from '../../../lib/api/apiSlices';
 import Pagination from '../pagination/pagination';
+import CardDetails from '../DetailsPage/DetailsPage';
 
 export interface SearchPageProps {
   initialData: IResponseResult;
   currPage: number;
 }
 
-const SearchPage: React.FC<SearchPageProps> = ({ initialData, currPage }) => {
-  // const router = useRouter();
+function SearchPage({ initialData, currPage }: SearchPageProps) {
+  const planets = initialData;
 
-  // const { data, error, isLoading } = useGetAllPlanetsQuery(
-  //   { page: currPage, search: '' },
-  //   {
-  //     skip: router.isFallback,
-  //     refetchOnMountOrArgChange: true,
-  //   }
-  // );
-  // const planets = data;
-  // console.log(planets);
-
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>An error occurred</div>;
+  const getId = (id: string) => {
+    router.push({
+      query: { ...router.query, planet: id },
+    });
+  };
 
   return (
     <>
@@ -42,22 +29,30 @@ const SearchPage: React.FC<SearchPageProps> = ({ initialData, currPage }) => {
           <Input />
         </div>
       </div>
-      <Pagination />
+      <Pagination currentPage={currPage} />
       <div className={style.cardsWrapper}>
-        {initialData?.isFetching ? (
+        {planets?.isFetching ? (
           <Spinner />
         ) : (
           <div className={style.commonWrapper}>
-            {initialData?.results?.map((planet: IPlanetMain) => (
+            {planets?.results?.map((planet) => (
               <div className={styles.cardContainer} key={planet.name}>
                 <Cards name={planet.name} url={planet.url} />
+                <button
+                  className={style.learnMoreBtn}
+                  type="submit"
+                  onClick={() => getId(planet.url?.split('/')[5] || '')}
+                >
+                  Learn More
+                </button>
               </div>
             ))}
           </div>
         )}
+        <CardDetails initialData={initialData} />
       </div>
     </>
   );
-};
+}
 
 export default SearchPage;

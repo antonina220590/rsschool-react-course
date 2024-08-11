@@ -32,6 +32,7 @@ module.exports = {
     'react-compiler/react-compiler': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     'class-methods-use-this': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'react-refresh/only-export-components': ['off'],
     'import/no-extraneous-dependencies': [
       'off',

@@ -1,68 +1,41 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/function-component-definition */
-import { GetServerSideProps } from 'next';
-import { Provider } from 'react-redux';
-import { makeStore } from '../lib/store';
+import { GetServerSidePropsContext } from 'next';
 import SearchPage, {
   SearchPageProps,
 } from '../components/ui/MainPage/SearchPage';
-import { getAllPlanets } from '../lib/api/apiSlices';
+import { IResponseResult } from '../components/utils/interface';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const store = makeStore();
-  const { query } = context;
-  const page = query.page ? Number(query.page) : 1;
-  await store.dispatch(getAllPlanets.initiate({ page, search: '' }));
-  // console.log('page', query.page);
-
-  const state = store.getState();
-  // console.log('state', state);
-  const result =
-    state.api.queries[`getAllPlanets({"page":${page},"search":""})`];
-
-  return {
-    props: {
-      initialData: result?.data,
-      currPage: page,
-    },
-  };
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const page = context.query.page ? Number(context.query.page) : 1;
+  const search = context.query.search || '';
+  if (Number.isNaN(page) || page < 1) {
+    return {
+      redirect: { destination: '/?page=1', permanent: false },
+      props: {},
+    };
+  }
+  try {
+    const res = await fetch(
+      `https://swapi.dev/api/planets/?search=${search}&page=${page}`
+    );
+    const repo: SearchPageProps = await res.json();
+    return { props: { repo, page } };
+  } catch (error) {
+    Error('Failed to fetch data');
+    return {
+      props: {
+        repo: {
+          results: [],
+        },
+        page: 1,
+      },
+    };
+  }
 };
 
-const Home: React.FC<SearchPageProps> = (props) => {
-  return (
-    <Provider store={makeStore()}>
-      <SearchPage {...props} />
-    </Provider>
-  );
-};
+function Home({ repo, page }: { repo: IResponseResult; page: number }) {
+  return <SearchPage initialData={repo} currPage={page} />;
+}
 
-const HomeWrapper: React.FC<SearchPageProps> = (props) => {
-  return (
-    <Provider store={makeStore()}>
-      <Home {...props} />
-    </Provider>
-  );
-};
-
-export default HomeWrapper;
-
-// const Home: React.FC<SearchPageProps> = (props) => {
-//   console.log(props);
-//   const store = makeStore();
-//   return (
-//     <Provider store={store}>
-//       <SearchPage {...props} />
-//     </Provider>
-//   );
-// };
-
-// function HomeWrapper(props: SearchPageProps) {
-//   console.log('test', props);
-//   return (
-//     <Provider store={makeStore()}>
-//       <Home {...props} />
-//     </Provider>
-//   );
-// }
-
-// export default HomeWrapper;
+export default Home;

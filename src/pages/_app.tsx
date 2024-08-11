@@ -1,11 +1,29 @@
-/* eslint-disable react/function-component-definition */
-/* eslint-disable react/jsx-props-no-spreading */
-
 import { AppProps } from 'next/app';
-import { wrapper } from '../lib/store'; // Ensure you have the correct path
+import { useContext } from 'react';
+import { Provider as ReduxProvider } from 'react-redux';
+import ErrorBoundary from '../components/utils/errorBoundary';
+import Flyout from '../components/ui/FlyoutElement/flyout';
+import ThemeBtn from '../components/ui/themeButton/themeButton';
+import { store } from '../lib/store';
+import { ThemeContext } from '../context/themeContext';
+import style from '../App.module.css';
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
-  return <Component {...pageProps} />;
-};
+function App({ Component, pageProps }: AppProps) {
+  const { darkTheme } = useContext(ThemeContext);
+  return (
+    <div
+      className={`${darkTheme === 'dark' ? style.wrapperDark : style.wrapperLight}`}
+      data-testid="theme"
+    >
+      <ErrorBoundary>
+        <ReduxProvider store={store}>
+          <ThemeBtn />
+          <Component {...pageProps} />
+          <Flyout />
+        </ReduxProvider>
+      </ErrorBoundary>
+    </div>
+  );
+}
 
-export default wrapper.withRedux(MyApp);
+export default App;
