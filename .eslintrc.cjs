@@ -33,6 +33,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'error',
     'class-methods-use-this': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'react/jsx-no-bind': 'off',
     'react-refresh/only-export-components': ['off'],
     'import/no-extraneous-dependencies': [
       'off',

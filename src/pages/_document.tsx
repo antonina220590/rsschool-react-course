@@ -5,7 +5,6 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-        <title>Planets</title>
       </Head>
       <body>
         <Main />

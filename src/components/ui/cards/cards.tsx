@@ -3,7 +3,6 @@ import style from './cards.module.css';
 import { IPlanet } from '../../utils/interface';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { addToFav, deleteFromFav } from '../../utils/favouritesSlice';
-// import Spinner from '../spinner/spinner';
 import { fetchPlanetById } from '../../../lib/api/api';
 
 function Cards({ name, url }: IPlanet) {

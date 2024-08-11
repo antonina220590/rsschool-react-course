@@ -19,6 +19,11 @@ export interface IResponseResult {
   isFetching?: boolean;
 
   id?: string;
+
+  count?: number;
+
+  next?: null;
+  previous?: null;
 }
 
 export interface Info {

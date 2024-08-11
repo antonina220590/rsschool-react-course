@@ -12,7 +12,7 @@ function CardDetails({ initialData }: SearchPageProps) {
   const { query } = router;
 
   const closeCard = () => {
-    const { planet, ...newQuery } = router.query;
+    const { planet, ...newQuery } = query;
 
     router.push({
       pathname: router.pathname,
@@ -22,13 +22,6 @@ function CardDetails({ initialData }: SearchPageProps) {
 
   const planets = initialData;
   const myId = query.planet;
-
-  planets.results.map((planet) => {
-    if (planet?.url?.split('/')[5] === myId) {
-      return planet.name;
-    }
-    return '';
-  });
 
   return (
     <>
@@ -92,9 +85,7 @@ function CardDetails({ initialData }: SearchPageProps) {
               Close
             </button>
           </div>
-        ) : (
-          <div key={`empty-${planet.name}`} />
-        )
+        ) : null
       )}
     </>
   );

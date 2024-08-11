@@ -15,7 +15,7 @@ function NotFoundPage() {
             </Link>
           </div>
           <div className={styles.errorImagebox}>
-            <Image src={image} alt="not-found page" />
+            <Image src={image} alt="not-found page" width={778} height={600} />
           </div>
         </div>
       </section>

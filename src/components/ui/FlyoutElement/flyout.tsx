@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { deleteFromFav } from '../../utils/favouritesSlice';
 import { IPlanet } from '../../utils/interface';
 import style from './flyout.module.css';
-import DownloadButton from './downloadBtn';
+import DownloadButton from './downloadButton/downloadBtn';
 
 export default function Flyout() {
   const list = useAppSelector((state) => state.favourites);
