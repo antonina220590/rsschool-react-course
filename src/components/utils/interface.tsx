@@ -13,9 +13,17 @@ export interface IPlanet {
 }
 
 export interface IResponseResult {
-  results: [];
+  results: IPlanet[];
   name: string;
   url: string;
+  isFetching?: boolean;
+
+  id?: string;
+
+  count?: number;
+
+  next?: null;
+  previous?: null;
 }
 
 export interface Info {
@@ -41,3 +49,9 @@ export interface IState {
 export type PlanetProp = {
   planet: IPlanet;
 };
+
+export type ThemeColor = 'dark' | 'light';
+export interface ThemeProps {
+  currentTheme?: ThemeColor;
+  toggleTheme?: () => void;
+}

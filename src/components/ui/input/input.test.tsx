@@ -1,37 +1,55 @@
-import { fireEvent, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { http, HttpResponse, delay } from 'msw';
-import { setupServer } from 'msw/node';
-import renderWithProviders from '../../utils/test-utils';
-import SearchPage from '../MainPage/SearchPage';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
+import { useRouter } from 'next/router';
+import Input from './input';
 
-export const handlers = [
-  http.get('https://swapi.dev/api/planets/*', async () => {
-    await delay(150);
-    return HttpResponse.json('1');
-  }),
-];
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
 
-const server = setupServer(...handlers);
+describe('Input Component', () => {
+  const pushMock = vi.fn();
+  const queryMock = { search: '' };
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+  beforeEach(() => {
+    (useRouter as vi.Mock).mockReturnValue({
+      query: queryMock,
+      push: pushMock,
+    });
+  });
 
-describe('search input functionality', () => {
-  test('should display item based on the search input data', async () => {
-    renderWithProviders(
-      <MemoryRouter>
-        <SearchPage />
-      </MemoryRouter>
-    );
-    const searchInput = screen.getByTestId('search-input');
-    fireEvent.change(searchInput, { target: { value: 'Tatooine' } });
-    const searchBtn = screen.getByTestId('search');
-    fireEvent.click(searchBtn);
+  it('renders the input and button', () => {
+    render(<Input />);
 
-    const item = await screen.findByText(/Tatooine/i);
-    expect(item).toBeInTheDocument();
+    const inputElement = screen.getByTestId('search-input');
+    const buttonElement = screen.getByTestId('search');
+
+    expect(inputElement).toBeInTheDocument();
+    expect(buttonElement).toBeInTheDocument();
+    expect(inputElement).toHaveAttribute('placeholder', 'search.....');
+  });
+
+  it('updates the search value when typing', () => {
+    render(<Input />);
+
+    const inputElement = screen.getByTestId('search-input');
+
+    fireEvent.change(inputElement, { target: { value: 'test search' } });
+
+    expect(inputElement.value).toBe('test search');
+  });
+
+  it('calls router.push with search query on button click', () => {
+    render(<Input />);
+
+    const inputElement = screen.getByTestId('search-input');
+    const buttonElement = screen.getByTestId('search');
+
+    fireEvent.change(inputElement, { target: { value: 'test search' } });
+    fireEvent.click(buttonElement);
+
+    expect(pushMock).toHaveBeenCalledWith({
+      query: { search: 'test search', page: 1 },
+    });
   });
 });
-export default handlers;

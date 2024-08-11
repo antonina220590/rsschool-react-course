@@ -1,76 +1,66 @@
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+import router from 'next/router';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
+import styl from '../../../App.module.css';
 import Input from '../input/input';
 import Cards from '../cards/cards';
-import { IPlanetMain } from '../../utils/interface';
+import { IResponseResult } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 import Pagination from '../pagination/pagination';
-import { useAppSelector } from '../../../app/hooks';
-import apiSlice from '../../api/apiSlices';
+import CardDetails from '../DetailsPage/DetailsPage';
+import useTheme from '../../../context/useThemeHook';
 
-function SearchPage() {
-  const searchVal = useAppSelector((state) => state.search.value);
-  const { planetId } = useParams();
-  const result = Number(planetId?.slice(1));
+export interface SearchPageProps {
+  initialData: IResponseResult;
+  currPage: number;
+}
 
-  const navigate = useNavigate();
-  const currPage = useAppSelector(
-    (state) => state.counter.value || 1
-  ).toString();
+function SearchPage({ initialData, currPage }: SearchPageProps) {
+  const planets = initialData;
 
-  const goBack = () => {
-    if (result) {
-      navigate(`/?page=${currPage}`);
-    }
+  const getId = (id: string) => {
+    router.push({
+      query: { ...router.query, planet: id },
+    });
   };
-
-  const { data, isFetching } = apiSlice.useGetAllPlanetsQuery({
-    page: Number(currPage),
-    search: searchVal,
-  });
+  const { currentTheme, toggleTheme } = useTheme();
 
   return (
-    <>
-      <div className={style.headerWrapper} onClick={goBack} role="presentation">
+    <div
+      className={`${currentTheme === 'dark' ? styl.wrapperDark : styl.wrapperLight}`}
+      data-testid="theme"
+    >
+      <button className={style.errorBtn} onClick={toggleTheme} type="button">
+        Toggle Theme
+      </button>
+      <div className={style.headerWrapper}>
         <div>
           <Input />
         </div>
       </div>
-      <Pagination />
+      <Pagination currentPage={currPage} />
       <div className={style.cardsWrapper}>
-        {isFetching ? (
+        {planets?.isFetching ? (
           <Spinner />
         ) : (
           <div className={style.commonWrapper}>
-            {data?.results?.map((planet: IPlanetMain) => {
-              return (
-                <div
-                  className={styles.cardContainer}
-                  key={planet.name}
-                  data-testid={planet.name}
+            {planets?.results?.map((planet) => (
+              <div className={styles.cardContainer} key={planet.name}>
+                <Cards name={planet.name} url={planet.url} />
+                <button
+                  className={style.learnMoreBtn}
+                  type="submit"
+                  onClick={() => getId(planet.url?.split('/')[5] || '')}
                 >
-                  <Cards name={planet.name} url={planet.url} />
-                  <Link
-                    className={style.link}
-                    to={`/planet/:${planet.url.split('/')[5]}/?page=${currPage}`}
-                    onClick={() =>
-                      navigate(`/planet/:${planet.url.split('/')[5]}`)
-                    }
-                    onClickCapture={goBack}
-                  >
-                    <button className={style.learnMoreBtn} type="button">
-                      Learn More
-                    </button>
-                  </Link>
-                </div>
-              );
-            })}
+                  Learn More
+                </button>
+              </div>
+            ))}
           </div>
         )}
-        <Outlet />
+        <CardDetails initialData={initialData} />
       </div>
-    </>
+    </div>
   );
 }
 

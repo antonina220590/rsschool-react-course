@@ -1,68 +1,36 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../../app/hooks';
-import { incremented, decremented } from '../../utils/counterSlice';
+import { useRouter } from 'next/router';
 import style from './pagination.module.css';
 
-function Pagination() {
-  const maxNumPage = 6;
+function Pagination({ currentPage }: { currentPage: number }) {
+  const router = useRouter();
 
-  const page = useAppSelector((state) => state.counter.value);
-
-  const dispatch = useAppDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const navigate = useNavigate();
-  const { planetId } = useParams();
-  const result = Number(planetId?.slice(1));
-
-  const increasePage = () => {
-    if (page < maxNumPage) {
-      dispatch(incremented());
-    }
-    const LSPage = (page + 1).toString();
-    setSearchParams({ page: LSPage });
-  };
-
-  const decreasePage = () => {
-    if (page > 1) {
-      dispatch(decremented());
-    }
-    const LSPage = (page - 1).toString();
-    if (searchParams) {
-      setSearchParams({ page: LSPage });
-    }
-  };
-
-  const goBack = () => {
-    if (result) {
-      navigate(`/?page=${page}`);
-    }
+  const goToPage = (pageNumber: number) => {
+    router.push({
+      pathname: '/',
+      query: { ...router.query, page: pageNumber.toString() },
+    });
   };
 
   return (
-    <div
-      className={style.paginationContainer}
-      onClick={goBack}
-      role="presentation"
-    >
+    <div className={style.paginationContainer} role="presentation">
       <button
-        className={page === 1 ? style.btn_disabled : style.prevBtn}
+        className={currentPage === 1 ? style.btn_disabled : style.prevBtn}
         type="button"
-        onClick={decreasePage}
+        onClick={() => goToPage(currentPage - 1)}
         data-testid="prev-button"
-        disabled={page === 1}
+        disabled={currentPage === 1}
       >
         Prev
       </button>
       <div className={style.page} data-testid="curr-page">
-        {page}
+        {currentPage}
       </div>
       <button
-        className={page > 5 ? style.btn_disabled : style.nextBtn}
+        className={currentPage > 5 ? style.btn_disabled : style.nextBtn}
         type="button"
-        onClick={increasePage}
+        onClick={() => goToPage(currentPage + 1)}
         data-testid="next-button"
-        disabled={page > 5}
+        disabled={currentPage > 5}
       >
         Next
       </button>
