@@ -10,7 +10,7 @@ export default function Flyout() {
 
   const deleteAllFrom = () => {
     list.forEach((obj: IPlanet) => {
-      dispatch(deleteFromFav({ title: obj.name }));
+      dispatch(deleteFromFav({ title: obj.name || '' }));
     });
   };
 

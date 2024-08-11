@@ -1,12 +1,14 @@
 import router from 'next/router';
 import style from './search_page.module.css';
 import styles from '../cards/cards.module.css';
+import styl from '../../../App.module.css';
 import Input from '../input/input';
 import Cards from '../cards/cards';
 import { IResponseResult } from '../../utils/interface';
 import Spinner from '../spinner/spinner';
 import Pagination from '../pagination/pagination';
 import CardDetails from '../DetailsPage/DetailsPage';
+import useTheme from '../../../context/useThemeHook';
 
 export interface SearchPageProps {
   initialData: IResponseResult;
@@ -21,9 +23,16 @@ function SearchPage({ initialData, currPage }: SearchPageProps) {
       query: { ...router.query, planet: id },
     });
   };
+  const { currentTheme, toggleTheme } = useTheme();
 
   return (
-    <>
+    <div
+      className={`${currentTheme === 'dark' ? styl.wrapperDark : styl.wrapperLight}`}
+      data-testid="theme"
+    >
+      <button className={style.errorBtn} onClick={toggleTheme} type="button">
+        Toggle Theme
+      </button>
       <div className={style.headerWrapper}>
         <div>
           <Input />
@@ -51,7 +60,7 @@ function SearchPage({ initialData, currPage }: SearchPageProps) {
         )}
         <CardDetails initialData={initialData} />
       </div>
-    </>
+    </div>
   );
 }
 

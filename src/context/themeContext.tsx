@@ -1,26 +1,16 @@
-import { createContext, ReactNode, useMemo, useState } from 'react';
+import { createContext, useState, ReactNode, useMemo } from 'react';
+import { ThemeColor, ThemeProps } from '../components/utils/interface';
 
-type ProviderProps = {
-  children: ReactNode;
-  initial: 'dark' | 'light';
-};
+export const ThemeContext = createContext<ThemeProps | undefined>(undefined);
 
-interface ThemeContextType {
-  darkTheme: 'dark' | 'light';
-  setTheme: React.Dispatch<React.SetStateAction<'dark' | 'light'>>;
-}
-export const ThemeContext = createContext<ThemeContextType>({
-  darkTheme: 'dark',
-  setTheme: () => {},
-});
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [currentTheme, setTheme] = useState<ThemeColor>('dark');
 
-export default function ThemeProvider({
-  children,
-  initial = 'dark',
-}: ProviderProps) {
-  const [darkTheme, setTheme] = useState(initial);
-  const value = useMemo(() => ({ darkTheme, setTheme }), [darkTheme]);
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
 
+  const value = useMemo(() => ({ currentTheme, toggleTheme }), [currentTheme]);
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );

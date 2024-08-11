@@ -44,3 +44,9 @@ export interface IState {
 export type PlanetProp = {
   planet: IPlanet;
 };
+
+export type ThemeColor = 'dark' | 'light';
+export interface ThemeProps {
+  currentTheme?: ThemeColor;
+  toggleTheme?: () => void;
+}
