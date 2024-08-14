@@ -1,5 +1,9 @@
 function ReactHooksForms() {
-  return <div>Hello! I am React Hooks Forms Page</div>;
+  return (
+    <main>
+      <div>Hello! I am React Hooks Forms Page</div>
+    </main>
+  );
 }
 
 export default ReactHooksForms;

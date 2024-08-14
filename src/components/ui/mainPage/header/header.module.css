@@ -26,3 +26,14 @@
 .buttons:hover {
   background-color: #fed8e5;
 }
+
+.buttonsActive {
+  font-family: 'Anonymous Pro', monospace;
+  font-weight: 700;
+  font-style: normal;
+  cursor: pointer;
+  padding: 15px 10px;
+  border-radius: 10px;
+  font-size: 20px;
+  background-color: #50bce7;
+}
