@@ -1,12 +1,15 @@
-import { Link } from 'react-router-dom';
+import Header from './header/header';
+import Footer from './footer/footer';
 
 function MainPage() {
   return (
-    <div>
-      <Link to="forms1">Uncontrolled Form</Link>
-      <br />
-      <Link to="forms2">React Hooks Forms</Link>
-    </div>
+    <>
+      <Header />
+      <main>
+        <div>I am main block</div>
+      </main>
+      <Footer />
+    </>
   );
 }
 
