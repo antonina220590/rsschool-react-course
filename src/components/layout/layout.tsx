@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import Header from '../ui/mainPage/header/header';
-import Footer from '../ui/mainPage/footer/footer';
+import Header from '../ui/header/header';
+import Footer from '../ui/footer/footer';
 
 function Layout() {
   return (
