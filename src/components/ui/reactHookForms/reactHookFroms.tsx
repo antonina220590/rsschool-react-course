@@ -1,78 +1,53 @@
-import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import { FieldValues, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import clsx from 'clsx';
 import style from './reactHookForms.module.css';
+import { getPasswordColor, getPasswordStrength } from '../../helpers/helper';
+import schema from '../../helpers/validation';
+import { setImage } from '../../../slices/imageSlice';
+import { setSelectedCountry } from '../../../slices/countrySlice';
+
+export interface CountryState {
+  country: {
+    countries: { label: string; value: string }[];
+    selectedCountry: string | null;
+  };
+}
 
 function ReactHooksForms() {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [strengthIndicator, setStrengthIndicator] = useState(false);
-
-  const schema = Yup.object().shape({
-    validName: Yup.string()
-      .matches(/^[A-Z][a-zA-Z]*$/, 'Name must start with an uppercase letter')
-      .required('Name is required'),
-    age: Yup.number()
-      .typeError('Age must be a number')
-      .min(1, 'Age must be a non-negative number')
-      .required('Age is required'),
-    email: Yup.string()
-      .matches(
-        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        'Email is not valid'
-      )
-      .required('Email is required'),
-    password: Yup.string()
-      .required('Password is required.')
-      .matches(/(?=.*[0-9])/, 'Password must contain at least 1 number.')
-      .matches(
-        /(?=.*[a-z])/,
-        'Password must contain at least 1 lowercase letter.'
-      )
-      .matches(
-        /(?=.*[A-Z])/,
-        'Password must contain at least 1 uppercase letter.'
-      )
-      .matches(
-        /(?=.*[!@#$%^&*])/,
-        'Password must contain at least 1 special character.'
-      ),
-    confirmPassword: Yup.string()
-      .required('Please confirm your password.')
-      .oneOf([Yup.ref('password'), ''], 'Passwords must match.'),
-  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
+  const countries = useSelector(
+    (state: CountryState) => state.country.countries
+  );
+  const dispatch = useDispatch();
 
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     formState: { errors },
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
 
-  // const onSubmit = (data: FieldValues) => {
-  // console.log('Form Data:', data);
-  // onSubmit={handleSubmit(onSubmit)};
-  // };
-
-  const getPasswordStrength = (password: string) => {
-    if (!password) return 0;
-    let strength = 0;
-    if (/(?=.*[0-9])/.test(password)) strength += 1;
-    if (/(?=.*[a-z])/.test(password)) strength += 1;
-    if (/(?=.*[A-Z])/.test(password)) strength += 1;
-    if (/(?=.*[!@#$%^&*])/.test(password)) strength += 1;
-    return strength;
-  };
-
-  const getPasswordColor = (strength: number) => {
-    if (strength === 0 || !strength) return 'red';
-    if (strength === 1) return 'orange';
-    if (strength === 2) return 'yellow';
-    if (strength === 3) return 'lightgreen';
-    return 'green';
+  const onSubmit = async (data: FieldValues) => {
+    const file = data.image[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = (reader.result as string)
+          .replace('data:', '')
+          .replace(/^.+,/, '');
+        dispatch(setImage(base64String));
+      };
+      reader.readAsDataURL(file);
+    }
+    dispatch(setSelectedCountry(data.country));
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +60,7 @@ function ReactHooksForms() {
   return (
     <main>
       <div className={style.hookFormWrapper}>
-        <form className={clsx(style.form)}>
+        <form className={clsx(style.form)} onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="name" className={clsx(style.formElement)}>
             Your Name:
             <input
@@ -108,6 +83,7 @@ function ReactHooksForms() {
             Your Age:
             <input
               type="number"
+              id="age"
               placeholder="Age..."
               {...register('age')}
               className={clsx(style.formElementInput)}
@@ -137,14 +113,24 @@ function ReactHooksForms() {
               </span>
             )}
           </div>
-          <label htmlFor="password" className={clsx(style.formElement)}>
+          <label
+            htmlFor="password"
+            className={clsx(style.formElement, style.passwordLabel)}
+          >
             Password:
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               {...register('password', { onChange: handlePasswordChange })}
               className={clsx(style.formElementInput)}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className={clsx(style.passwordBtn)}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
           </label>
           <div className={clsx(style.errorBox)}>
             {errors.password && (
@@ -159,9 +145,8 @@ function ReactHooksForms() {
                 <p className={clsx(style.strengthTitle)}>Password Strength</p>
                 <div className={clsx(style.strengthBox)}>
                   <div
+                    className={clsx(style.strengthLine)}
                     style={{
-                      height: '100%',
-                      transition: 'width 0.3s ease-in-out',
                       width: `${(passwordStrength / 4) * 100}%`,
                       backgroundColor: getPasswordColor(passwordStrength),
                     }}
@@ -171,15 +156,25 @@ function ReactHooksForms() {
             )}
           </div>
 
-          <label htmlFor="confirmPassword" className={clsx(style.formElement)}>
+          <label
+            htmlFor="confirmPassword"
+            className={clsx(style.formElement, style.passwordLabel)}
+          >
             Confirm Password:
             <input
-              type="password"
+              type={showSecondPassword ? 'text' : 'password'}
               id="confirmPassword"
               placeholder="Confirm Password"
               {...register('confirmPassword')}
               className={clsx(style.formElementInput)}
             />
+            <button
+              type="button"
+              onClick={() => setShowSecondPassword((prev) => !prev)}
+              className={clsx(style.passwordBtn)}
+            >
+              {showSecondPassword ? 'Hide' : 'Show'}
+            </button>
           </label>
           <div className={clsx(style.errorBox)}>
             {errors.confirmPassword && (
@@ -190,28 +185,74 @@ function ReactHooksForms() {
           </div>
 
           <label htmlFor="gender" className={clsx(style.formElement)}>
-            Category:
-            <select name="gender" className={clsx(style.formElementInput)}>
+            Gender:
+            <select
+              id="gender"
+              className={clsx(style.formElementInput)}
+              {...register('gender')}
+            >
               <option value="">Select...</option>
-              <option value="technology">Male</option>
-              <option value="health">Female</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
           </label>
-          <label htmlFor="file" className={clsx(style.formElement)}>
-            <input type="file" name="file" accept=".png, .jpeg, .jpg" />
-
-            <button type="submit" className={clsx(style.imgButton)}>
-              Upload
-            </button>
+          <div className={clsx(style.errorBox)}>
+            {errors.gender && (
+              <span className={clsx(style.errorMessage)}>
+                {errors.gender.message}
+              </span>
+            )}
+          </div>
+          <label htmlFor="country" className={clsx(style.formElement)}>
+            Select Country:
+            <select
+              id="country"
+              {...register('country')}
+              className={clsx(style.formElementInput)}
+            >
+              <option value="">Select a country...</option>
+              {countries.map((country) => (
+                <option key={country.value} value={country.value}>
+                  {country.label}
+                </option>
+              ))}
+            </select>
           </label>
-          <label htmlFor="terms" className={clsx(style.formElement)}>
-            I agree to the Terms and Conditions
+          {errors.country && (
+            <span style={{ color: 'red' }}>{errors.country.message}</span>
+          )}
+          <label htmlFor="image" className={clsx(style.formElement)}>
+            <input
+              className={clsx(style.fileInput)}
+              type="file"
+              id="image"
+              accept=".png, .jpeg"
+              {...register('image')}
+            />
+          </label>
+          <div className={clsx(style.errorBox)}>
+            {errors.image && (
+              <span className={clsx(style.errorMessage)}>
+                {errors.image.message}
+              </span>
+            )}
+          </div>
+          <label htmlFor="conditions" className={clsx(style.formElement)}>
+            I accept the Terms and Conditions
             <input
               type="checkbox"
               className={clsx(style.termsInput)}
-              name="terms"
+              id="conditions"
+              {...register('conditionsForm')}
             />
           </label>
+          <div className={clsx(style.errorBox)}>
+            {errors.conditionsForm && (
+              <span className={clsx(style.errorMessage)}>
+                {errors.conditionsForm.message}
+              </span>
+            )}
+          </div>
           <button type="submit" className={clsx(style.submitButton)}>
             Submit
           </button>
