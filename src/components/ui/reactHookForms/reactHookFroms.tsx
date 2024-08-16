@@ -1,4 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
@@ -7,12 +8,26 @@ import style from './reactHookForms.module.css';
 import { getPasswordColor, getPasswordStrength } from '../../helpers/helper';
 import schema from '../../helpers/validation';
 import { setImage } from '../../../slices/imageSlice';
-import { setSelectedCountry } from '../../../slices/countrySlice';
+import {
+  setAge,
+  setEmail,
+  setGender,
+  setName,
+  setPassword,
+  setSelectedCountry,
+  setConditions,
+} from '../../../slices/dataSlice';
 
-export interface CountryState {
-  country: {
+export interface DataState {
+  data: {
+    age: number[];
+    name: string[];
     countries: { label: string; value: string }[];
-    selectedCountry: string | null;
+    selectedCountry: string[];
+    email: string[];
+    password: string[];
+    gender: string[];
+    conditions: boolean[];
   };
 }
 
@@ -21,10 +36,10 @@ function ReactHooksForms() {
   const [strengthIndicator, setStrengthIndicator] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showSecondPassword, setShowSecondPassword] = useState(false);
-  const countries = useSelector(
-    (state: CountryState) => state.country.countries
-  );
+  const countries = useSelector((state: DataState) => state.data.countries);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -43,11 +58,18 @@ function ReactHooksForms() {
         const base64String = (reader.result as string)
           .replace('data:', '')
           .replace(/^.+,/, '');
-        dispatch(setImage(base64String));
+        dispatch(setImage({ image: base64String }));
       };
       reader.readAsDataURL(file);
     }
     dispatch(setSelectedCountry(data.country));
+    dispatch(setName(data.validName));
+    dispatch(setAge(data.age));
+    dispatch(setEmail(data.email));
+    dispatch(setPassword(data.password));
+    dispatch(setGender(data.gender));
+    dispatch(setConditions(data.conditionsForm));
+    navigate('/');
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {

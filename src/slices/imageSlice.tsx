@@ -1,15 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
-  baseImage: null,
+interface Image {
+  image?: string;
+}
+
+export interface ImageState {
+  baseImage: Image[];
+}
+
+const initialState: ImageState = {
+  baseImage: [],
 };
 
 const imageSlice = createSlice({
   name: 'image',
   initialState,
   reducers: {
-    setImage: (state, action) => {
-      state.baseImage = action.payload;
+    setImage: (state, action: PayloadAction<Image>) => {
+      state.baseImage.push(action.payload);
     },
   },
 });
