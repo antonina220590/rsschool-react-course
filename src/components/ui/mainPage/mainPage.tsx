@@ -18,7 +18,8 @@ function MainPage() {
                 index === submissions.length - 1 ? style.lastTile : style.tile
               }
             >
-              {submission.image && submission.image.length > 0 ? (
+              {Array.isArray(submission.image) &&
+              submission.image.length > 0 ? (
                 submission.image.map((image, imgIndex) => (
                   <div key={image} className={clsx(style.imageTile)}>
                     <img

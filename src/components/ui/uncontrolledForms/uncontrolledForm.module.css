@@ -1,0 +1,8 @@
+.hookFormWrapper {
+  margin: auto;
+  width: 60vw;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
