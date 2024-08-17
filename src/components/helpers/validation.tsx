@@ -50,12 +50,7 @@ const schema = Yup.object().shape({
   conditionsForm: Yup.boolean()
     .oneOf([true], 'You must accept the terms and conditions')
     .required('You must accept the terms and conditions'),
-  country: Yup.string()
-    .required('Country is required.')
-    .oneOf(
-      ['China', 'Russia', 'Belarus', 'Kazakhstan'],
-      'Please select your country.'
-    ),
+  country: Yup.string().required('Country is required.'),
 });
 
 export default schema;

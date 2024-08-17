@@ -1,43 +1,74 @@
-// import { useSelector } from 'react-redux';
-// import { DataState } from '../reactHookForms/reactHookFroms';
-// import style from './mainPage.module.css';
-// import { ImageState } from '../../../slices/imageSlice';
-// import { RootState } from '../../../app/store';
+import { useSelector } from 'react-redux';
+import clsx from 'clsx';
+import style from './mainPage.module.css';
+import { RootState } from '../../../app/store';
 
 function MainPage() {
-  // const countries = useSelector(
-  //   (state: DataState) => state.data.selectedCountry
-  // );
-  // const names = useSelector((state: DataState) => state.data.name);
-  // const age = useSelector((state: DataState) => state.data.age);
-  // const email = useSelector((state: DataState) => state.data.email);
-  // const password = useSelector((state: DataState) => state.data.password);
-  // const gender = useSelector((state: DataState) => state.data.gender);
-  // const conditions = useSelector((state: DataState) => state.data.conditions);
-  // const baseImages = useSelector((state: RootState) => state.image.baseImage);
-  // return (
-  //   <main>
-  //     <div className={style.mainPageWrapper}>
-  //     </div>
-  //   </main>
-  // );
+  const submissions = useSelector((state: RootState) => state.data.submissions);
+
+  return (
+    <main>
+      <h1 className={clsx(style.mainH1)}>Form Submission History</h1>
+      <div className={style.mainPageWrapper}>
+        {submissions.length > 0 ? (
+          submissions.map((submission, index) => (
+            <div
+              key={submission.password}
+              className={
+                index === submissions.length - 1 ? style.lastTile : style.tile
+              }
+            >
+              {submission.image && submission.image.length > 0 ? (
+                submission.image.map((image, imgIndex) => (
+                  <div key={image} className={clsx(style.imageTile)}>
+                    <img
+                      src={`data:image/png;base64,${image}`}
+                      alt={`uploaded ${imgIndex + 1}`}
+                      style={{ width: '100px', height: 'auto' }}
+                    />
+                  </div>
+                ))
+              ) : (
+                <p>No images uploaded for this submission.</p>
+              )}
+              <div className={clsx(style.tileName, style.tileText)}>
+                Name:
+                <p className={clsx(style.tilePara)}>{submission.validName}</p>
+              </div>
+              <div className={clsx(style.tileText)}>
+                Age:
+                <p className={clsx(style.tilePara)}> {submission.age} years</p>
+              </div>
+              <div className={clsx(style.tileText)}>
+                Email:
+                <p className={clsx(style.tilePara)}>{submission.email}</p>
+              </div>
+              <div className={clsx(style.tileText)}>
+                Password:
+                <p className={clsx(style.tilePara)}> {submission.password}</p>
+              </div>
+              <div className={clsx(style.tileText)}>
+                Gender:
+                <p className={clsx(style.tilePara)}>{submission.gender}</p>
+              </div>
+              <div className={clsx(style.tileText)}>
+                Terms Accepted:
+                <p className={clsx(style.tilePara)}>
+                  {submission.conditions ? 'False' : 'True'}
+                </p>
+              </div>
+              <div className={clsx(style.tileText)}>
+                Country:
+                <p className={clsx(style.tilePara)}>{submission.country}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No submissions yet.</p>
+        )}
+      </div>
+    </main>
+  );
 }
 
 export default MainPage;
-
-/* <h2>Uploaded Images</h2>
-<div className="image-container">
-  {baseImages.length > 0 ? (
-    baseImages.map((imageObj, index) => (
-      <div key={index} className="tile">
-        <img
-          src={`data:image/png;base64,${imageObj.image}`}
-          alt="uploaded"
-          style={{ width: '100px', height: 'auto' }}
-        />
-      </div>
-    ))
-  ) : (
-    <p>No images uploaded yet.</p>
-  )}
-</div> */

@@ -1,79 +1,37 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import countriesList from './countryList';
 
 interface Data {
-  value?: string;
-  label?: string;
+  validName?: string;
   name?: string;
   age?: number;
-
+  country?: string;
   email?: string;
   password?: string;
   gender?: string;
   conditions?: boolean;
+  image?: string[];
 }
 
 interface DataState {
-  countries: Data[];
-  selectedCountry: Data[];
-  name: Data[];
-  age: Data[];
-  email: Data[];
-  password: Data[];
-  gender: Data[];
-  conditions: Data[];
+  countries: string[];
+  submissions: Data[];
 }
 
 const initialState: DataState = {
-  countries: [
-    { value: 'China', label: 'China' },
-    { value: 'Russia', label: 'Russia' },
-    { value: 'Kazakhstan', label: 'Kazakhstan' },
-    { value: 'Belarus', label: 'Belarus' },
-  ],
-  selectedCountry: [],
-  name: [],
-  age: [],
-  email: [],
-  password: [],
-  gender: [],
-  conditions: [],
+  countries: countriesList,
+  submissions: [],
 };
 
 const dataSlice = createSlice({
-  name: 'countries',
+  name: 'data',
   initialState,
   reducers: {
-    setSelectedCountry: (state, action: PayloadAction<Data>) => {
-      state.selectedCountry.push(action.payload);
-    },
-    setName: (state, action: PayloadAction<Data>) => {
-      state.name.push(action.payload);
-    },
-    setAge: (state, action: PayloadAction<Data>) => {
-      state.age.push(action.payload);
-    },
-    setEmail: (state, action: PayloadAction<Data>) => {
-      state.email.push(action.payload);
-    },
-    setPassword: (state, action: PayloadAction<Data>) => {
-      state.password.push(action.payload);
-    },
-    setGender: (state, action: PayloadAction<Data>) => {
-      state.gender.push(action.payload);
-    },
-    setConditions: (state, action: PayloadAction<Data>) => {
-      state.conditions.push(action.payload);
+    setSubmission: (state, action: PayloadAction<Data>) => {
+      state.submissions.push(action.payload);
     },
   },
 });
 
-export const {
-  setSelectedCountry,
-  setName,
-  setAge,
-  setEmail,
-  setPassword,
-  setGender,
-  setConditions,
-} = dataSlice.actions;
+export const { setSubmission } = dataSlice.actions;
 export default dataSlice.reducer;

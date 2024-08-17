@@ -123,3 +123,26 @@
 .passwordLabel {
   position: relative;
 }
+
+.inputBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
+}
+
+.countryInput {
+  width: 73%;
+}
+
+.dropBox {
+  width: 74%;
+  display: flex;
+  background-color: #fea805;
+  position: absolute;
+  top: 100%;
+  flex-direction: column;
+  cursor: pointer;
+}

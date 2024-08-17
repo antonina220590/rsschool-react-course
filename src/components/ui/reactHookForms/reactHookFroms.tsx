@@ -7,36 +7,18 @@ import clsx from 'clsx';
 import style from './reactHookForms.module.css';
 import { getPasswordColor, getPasswordStrength } from '../../helpers/helper';
 import schema from '../../helpers/validation';
-import { setImage } from '../../../slices/imageSlice';
-import {
-  setAge,
-  setEmail,
-  setGender,
-  setName,
-  setPassword,
-  setSelectedCountry,
-  setConditions,
-} from '../../../slices/dataSlice';
-
-export interface DataState {
-  data: {
-    age: number[];
-    name: string[];
-    countries: { label: string; value: string }[];
-    selectedCountry: string[];
-    email: string[];
-    password: string[];
-    gender: string[];
-    conditions: boolean[];
-  };
-}
+import { setSubmission } from '../../../slices/dataSlice';
+import { RootState } from '../../../app/store';
 
 function ReactHooksForms() {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [strengthIndicator, setStrengthIndicator] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showSecondPassword, setShowSecondPassword] = useState(false);
-  const countries = useSelector((state: DataState) => state.data.countries);
+  const countries = useSelector((state: RootState) => state.data.countries);
+
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,26 +32,47 @@ function ReactHooksForms() {
     resolver: yupResolver(schema),
   });
 
+  const handleInputChange = (value: string) => {
+    setInputValue(value);
+
+    if (value) {
+      const filteredCountries = countries.filter((country) =>
+        country.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredCountries);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (country: string) => {
+    setInputValue(country);
+    setSuggestions([]);
+  };
+
   const onSubmit = async (data: FieldValues) => {
-    const file = data.image[0];
-    if (file) {
+    const selectedCountry = inputValue;
+    if (data.image && data.image[0]) {
+      const file = data.image[0];
       const reader = new FileReader();
+
       reader.onloadend = () => {
-        const base64String = (reader.result as string)
-          .replace('data:', '')
-          .replace(/^.+,/, '');
-        dispatch(setImage({ image: base64String }));
+        if (reader.result) {
+          const base64String = (reader.result as string)
+            .replace('data:', '')
+            .replace(/^.+,/, '');
+
+          const submission: Record<string, string[]> = {
+            ...data,
+            image: [base64String],
+            country: [selectedCountry],
+          };
+          dispatch(setSubmission(submission));
+          navigate('/');
+        }
       };
       reader.readAsDataURL(file);
     }
-    dispatch(setSelectedCountry(data.country));
-    dispatch(setName(data.validName));
-    dispatch(setAge(data.age));
-    dispatch(setEmail(data.email));
-    dispatch(setPassword(data.password));
-    dispatch(setGender(data.gender));
-    dispatch(setConditions(data.conditionsForm));
-    navigate('/');
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,6 +144,7 @@ function ReactHooksForms() {
           >
             Password:
             <input
+              autoComplete="new-password"
               type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               {...register('password', { onChange: handlePasswordChange })}
@@ -184,6 +188,7 @@ function ReactHooksForms() {
           >
             Confirm Password:
             <input
+              autoComplete="new-password"
               type={showSecondPassword ? 'text' : 'password'}
               id="confirmPassword"
               placeholder="Confirm Password"
@@ -226,23 +231,45 @@ function ReactHooksForms() {
             )}
           </div>
           <label htmlFor="country" className={clsx(style.formElement)}>
-            Select Country:
-            <select
-              id="country"
-              {...register('country')}
-              className={clsx(style.formElementInput)}
-            >
-              <option value="">Select a country...</option>
-              {countries.map((country) => (
-                <option key={country.value} value={country.value}>
-                  {country.label}
-                </option>
-              ))}
-            </select>
+            Country:
+            <div className={clsx(style.inputBox)}>
+              <input
+                {...register('country')}
+                className={clsx(style.formElementInput, style.countryInput)}
+                id="country"
+                type="text"
+                value={inputValue}
+                onChange={(e) => handleInputChange(e.target.value)}
+                placeholder="Search for a country..."
+              />
+              <div className={clsx(style.dropBox)}>
+                {suggestions.map((country) => (
+                  <div
+                    key={country}
+                    className="autocomplete-item"
+                    onClick={() => handleSuggestionClick(country)}
+                    role="option"
+                    aria-selected={inputValue === country}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        handleSuggestionClick(country);
+                      }
+                    }}
+                  >
+                    {country}
+                  </div>
+                ))}
+              </div>
+            </div>
           </label>
-          {errors.country && (
-            <span style={{ color: 'red' }}>{errors.country.message}</span>
-          )}
+          <div className={clsx(style.errorBox)}>
+            {errors.country && (
+              <span className={clsx(style.errorMessage)}>
+                {errors.country.message}
+              </span>
+            )}
+          </div>
           <label htmlFor="image" className={clsx(style.formElement)}>
             <input
               className={clsx(style.fileInput)}
@@ -283,5 +310,4 @@ function ReactHooksForms() {
     </main>
   );
 }
-
 export default ReactHooksForms;

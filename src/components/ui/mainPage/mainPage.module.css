@@ -1,8 +1,62 @@
 .mainPageWrapper {
   margin: auto;
-  width: 60vw;
+  width: 90vw;
   height: 70vh;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 100vh;
+  gap: 20px;
+}
+
+.tileWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.tile {
+  width: 300px;
+  border: 5px dotted green;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Anonymous Pro', monospace;
+  font-weight: 700;
+  font-style: normal;
+  align-items: center;
+}
+
+.lastTile {
+  width: 300px;
+  border: 5px dotted red;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Anonymous Pro', monospace;
+  font-weight: 700;
+  font-style: normal;
+  align-items: center;
+}
+
+.tileText {
+  display: flex;
+  align-items: center;
+}
+
+.imageTile {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.mainH1 {
+  margin: 0 0 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.tilePara {
+  margin: 5px;
 }
