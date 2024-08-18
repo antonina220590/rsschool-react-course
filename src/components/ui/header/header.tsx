@@ -28,5 +28,3 @@ function Header() {
 }
 
 export default Header;
-
-// isActive ? 'buttonsActive' : 'buttons'
