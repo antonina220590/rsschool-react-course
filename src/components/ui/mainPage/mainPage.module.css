@@ -1,11 +1,13 @@
 .mainPageWrapper {
   margin: auto;
   width: 90vw;
-  height: 70vh;
   display: flex;
+  height: 90vh;
   justify-content: flex-start;
-  min-height: 100vh;
+  min-height: min-content;
   gap: 20px;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .tileWrapper {
@@ -17,7 +19,7 @@
 .tile {
   width: 300px;
   border: 5px dotted green;
-  height: 30%;
+  height: min-content;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -30,7 +32,7 @@
 .lastTile {
   width: 300px;
   border: 5px dotted red;
-  height: 30%;
+  height: min-content;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -49,6 +51,7 @@
   display: flex;
   justify-content: center;
   padding-top: 10px;
+  height: 100px;
 }
 
 .mainH1 {

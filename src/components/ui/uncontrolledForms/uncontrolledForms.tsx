@@ -1,17 +1,15 @@
-/* eslint-disable no-param-reassign */
 import clsx from 'clsx';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ValidationError } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from './uncontrolledForm.module.css';
 import style from '../reactHookForms/reactHookForms.module.css';
 import schema from '../../helpers/validation';
 import { setSubmission } from '../../../slices/dataSlice';
 import { getPasswordColor, getPasswordStrength } from '../../helpers/helper';
 import { RootState } from '../../../app/store';
 
-interface ErrorMap {
+interface IError {
   [key: string]: string;
 }
 
@@ -31,7 +29,7 @@ function UncontrolledForms() {
   const [strengthIndicator, setStrengthIndicator] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [showSecondPassword, setShowSecondPassword] = useState(false);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestedCountry, setSuggestedCountry] = useState<string[]>([]);
   const countries = useSelector((state: RootState) => state.data.countries);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,9 +41,9 @@ function UncontrolledForms() {
       const filteredCountries = countries.filter((country) =>
         country.toLowerCase().startsWith(value.toLowerCase())
       );
-      setSuggestions(filteredCountries);
+      setSuggestedCountry(filteredCountries);
     } else {
-      setSuggestions([]);
+      setSuggestedCountry([]);
     }
   };
 
@@ -53,7 +51,7 @@ function UncontrolledForms() {
     if (inputCountry.current) {
       inputCountry.current.value = country;
     }
-    setSuggestions([]);
+    setSuggestedCountry([]);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -102,10 +100,13 @@ function UncontrolledForms() {
       if (error instanceof ValidationError) {
         const formattedErrors = error.inner.reduce((acc, err) => {
           if (err.path) {
-            acc[err.path] = err.message;
+            return {
+              ...acc,
+              [err.path]: err.message,
+            };
           }
           return acc;
-        }, {} as ErrorMap);
+        }, {} as IError);
         setErrors(formattedErrors);
       }
       handlePasswordChange();
@@ -114,7 +115,7 @@ function UncontrolledForms() {
 
   return (
     <main>
-      <div className={styles.hookFormWrapper}>
+      <div className={style.hookFormWrapper}>
         <form className={clsx(style.form)} onSubmit={handleSubmit}>
           <label htmlFor="name" className={clsx(style.formElement)}>
             Your Name:
@@ -263,9 +264,9 @@ function UncontrolledForms() {
                 onChange={handleInputChange}
                 placeholder="Search for a country..."
               />
-              {suggestions.length > 0 && (
+              {suggestedCountry.length > 0 && (
                 <div className={clsx(style.dropBox)}>
-                  {suggestions.map((country) => (
+                  {suggestedCountry.map((country) => (
                     <div
                       key={country}
                       className="autocomplete-item"

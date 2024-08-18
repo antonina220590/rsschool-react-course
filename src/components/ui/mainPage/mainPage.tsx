@@ -13,7 +13,7 @@ function MainPage() {
         {submissions.length > 0 ? (
           submissions.map((submission, index) => (
             <div
-              key={submission.password}
+              key={submission.email}
               className={
                 index === submissions.length - 1 ? style.lastTile : style.tile
               }
