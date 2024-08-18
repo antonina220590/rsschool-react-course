@@ -271,6 +271,7 @@ function ReactHooksForms() {
             )}
           </div>
           <label htmlFor="image" className={clsx(style.formElement)}>
+            Upload Image:
             <input
               className={clsx(style.fileInput)}
               type="file"
