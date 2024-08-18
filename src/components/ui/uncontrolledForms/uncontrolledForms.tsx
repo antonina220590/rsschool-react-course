@@ -1,13 +1,15 @@
 /* eslint-disable no-param-reassign */
 import clsx from 'clsx';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ValidationError } from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './uncontrolledForm.module.css';
 import style from '../reactHookForms/reactHookForms.module.css';
 import schema from '../../helpers/validation';
 import { setSubmission } from '../../../slices/dataSlice';
 import { getPasswordColor, getPasswordStrength } from '../../helpers/helper';
+import { RootState } from '../../../app/store';
 
 interface ErrorMap {
   [key: string]: string;
@@ -19,12 +21,40 @@ function UncontrolledForms() {
   const inputEmail = useRef<HTMLInputElement>(null);
   const inputImage = useRef<HTMLInputElement>(null);
   const inputPassword = useRef<HTMLInputElement>(null);
+  const inputConfirmPassword = useRef<HTMLInputElement>(null);
+  const inputGender = useRef<HTMLSelectElement>(null);
+  const inputCountry = useRef<HTMLInputElement>(null);
+  const inputConditionsFrom = useRef<HTMLInputElement>(null);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [strengthIndicator, setStrengthIndicator] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const countries = useSelector((state: RootState) => state.data.countries);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleInputChange = () => {
+    const value = inputCountry.current?.value || '';
+
+    if (value) {
+      const filteredCountries = countries.filter((country) =>
+        country.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredCountries);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (country: string) => {
+    if (inputCountry.current) {
+      inputCountry.current.value = country;
+    }
+    setSuggestions([]);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -34,6 +64,10 @@ function UncontrolledForms() {
       email: inputEmail?.current?.value,
       image: inputImage?.current?.files,
       password: inputPassword?.current?.value,
+      confirmPassword: inputConfirmPassword?.current?.value,
+      gender: inputGender?.current?.value,
+      country: inputCountry?.current?.value,
+      conditionsForm: inputConditionsFrom?.current?.checked,
     };
 
     const handlePasswordChange = () => {
@@ -47,6 +81,7 @@ function UncontrolledForms() {
       await schema.validate(formData, { abortEarly: false });
       setErrors({});
       handlePasswordChange();
+      navigate('/');
       if (formData.image && formData.image.length > 0) {
         const file = formData.image[0];
         const reader = new FileReader();
@@ -56,10 +91,8 @@ function UncontrolledForms() {
             .replace(/^.+,/, '');
           dispatch(
             setSubmission({
-              validName: formData.validName,
-              age: formData.age,
+              ...formData,
               image: [base64String],
-              password: formData.password,
             })
           );
         };
@@ -173,6 +206,91 @@ function UncontrolledForms() {
               </>
             )}
           </div>
+          <label
+            htmlFor="confirmPassword"
+            className={clsx(style.formElement, style.passwordLabel)}
+          >
+            Confirm Password:
+            <input
+              autoComplete="new-password"
+              type={showSecondPassword ? 'text' : 'password'}
+              id="confirmPassword"
+              ref={inputConfirmPassword}
+              placeholder="Confirm Password"
+              className={clsx(style.formElementInput)}
+            />
+            <button
+              type="button"
+              onClick={() => setShowSecondPassword((prev) => !prev)}
+              className={clsx(style.passwordBtn)}
+            >
+              {showSecondPassword ? 'Hide' : 'Show'}
+            </button>
+          </label>
+          <div className={clsx(style.errorBox)}>
+            {errors.confirmPassword && (
+              <span className={clsx(style.errorMessage)}>
+                {errors.confirmPassword}
+              </span>
+            )}
+          </div>
+          <label htmlFor="gender" className={clsx(style.formElement)}>
+            Gender:
+            <select
+              id="gender"
+              className={clsx(style.formElementInput)}
+              ref={inputGender}
+            >
+              <option value="">Select...</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </label>
+          <div className={clsx(style.errorBox)}>
+            {errors.gender && (
+              <span className={clsx(style.errorMessage)}>{errors.gender}</span>
+            )}
+          </div>
+
+          <label htmlFor="country" className={clsx(style.formElement)}>
+            Country:
+            <div className={clsx(style.inputBox)}>
+              <input
+                className={clsx(style.formElementInput, style.countryInput)}
+                id="country"
+                type="text"
+                ref={inputCountry}
+                onChange={handleInputChange}
+                placeholder="Search for a country..."
+              />
+              {suggestions.length > 0 && (
+                <div className={clsx(style.dropBox)}>
+                  {suggestions.map((country) => (
+                    <div
+                      key={country}
+                      className="autocomplete-item"
+                      onClick={() => handleSuggestionClick(country)}
+                      role="option"
+                      aria-selected={inputCountry.current?.value === country}
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          handleSuggestionClick(country);
+                        }
+                      }}
+                    >
+                      {country}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </label>
+          <div className={clsx(style.errorBox)}>
+            {errors.country && (
+              <span className={clsx(style.errorMessage)}>{errors.country}</span>
+            )}
+          </div>
 
           <label htmlFor="image" className={clsx(style.formElement)}>
             Upload Image:
@@ -187,6 +305,22 @@ function UncontrolledForms() {
           <div className={clsx(style.errorBox)}>
             {errors.image && (
               <span className={clsx(style.errorMessage)}>{errors.image}</span>
+            )}
+          </div>
+          <label htmlFor="conditions" className={clsx(style.formElement)}>
+            I accept the Terms and Conditions
+            <input
+              type="checkbox"
+              className={clsx(style.termsInput)}
+              id="conditions"
+              ref={inputConditionsFrom}
+            />
+          </label>
+          <div className={clsx(style.errorBox)}>
+            {errors.conditionsForm && (
+              <span className={clsx(style.errorMessage)}>
+                {errors.conditionsForm}
+              </span>
             )}
           </div>
           <button type="submit" className={clsx(style.submitButton)}>

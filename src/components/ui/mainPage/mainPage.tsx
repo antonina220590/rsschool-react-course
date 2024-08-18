@@ -38,7 +38,10 @@ function MainPage() {
               </div>
               <div className={clsx(style.tileText)}>
                 Age:
-                <p className={clsx(style.tilePara)}> {submission.age} years</p>
+                <p className={clsx(style.tilePara)}>
+                  {' '}
+                  {submission.age} years old
+                </p>
               </div>
               <div className={clsx(style.tileText)}>
                 Email:

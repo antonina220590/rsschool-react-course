@@ -32,6 +32,7 @@ module.exports = {
     'react/prefer-stateless-function': 'off',
     'class-methods-use-this': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'no-inline-comments': 'error',
     'no-param-reassign': [
       'error',
       {
