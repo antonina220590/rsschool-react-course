@@ -16,7 +16,6 @@ function ReactHooksForms() {
   const [showPassword, setShowPassword] = useState(false);
   const [showSecondPassword, setShowSecondPassword] = useState(false);
   const countries = useSelector((state: RootState) => state.data.countries);
-
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -89,6 +88,7 @@ function ReactHooksForms() {
           <label htmlFor="name" className={clsx(style.formElement)}>
             Your Name:
             <input
+              autoComplete="name"
               type="text"
               id="name"
               placeholder="Name..."
@@ -124,6 +124,7 @@ function ReactHooksForms() {
           <label htmlFor="email" className={clsx(style.formElement)}>
             Email:
             <input
+              autoComplete="email"
               type="email"
               id="email"
               placeholder="user@example.com"

@@ -31,6 +31,7 @@ function UncontrolledForms() {
   const [showSecondPassword, setShowSecondPassword] = useState(false);
   const [suggestedCountry, setSuggestedCountry] = useState<string[]>([]);
   const countries = useSelector((state: RootState) => state.data.countries);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -137,6 +138,7 @@ function UncontrolledForms() {
           <label htmlFor="age" className={clsx(style.formElement)}>
             Your Name:
             <input
+              autoComplete="name"
               type="number"
               id="age"
               ref={inputAge}
@@ -152,6 +154,7 @@ function UncontrolledForms() {
           <label htmlFor="email" className={clsx(style.formElement)}>
             Email:
             <input
+              autoComplete="email"
               type="text"
               id="email"
               ref={inputEmail}

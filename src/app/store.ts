@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import dataReducer from '../slices/dataSlice';
+import { dataReducer, DataState } from '../slices/dataSlice';
 
 const store = configureStore({
   reducer: {
@@ -8,7 +8,7 @@ const store = configureStore({
 });
 
 export type RootState = {
-  data: ReturnType<typeof dataReducer>;
+  data: DataState;
 };
 
 export default store;

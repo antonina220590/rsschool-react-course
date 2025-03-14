@@ -33,6 +33,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-inline-comments': 'error',
+    'react/no-array-index-key': 'off',
     'no-param-reassign': [
       'error',
       {

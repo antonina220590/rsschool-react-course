@@ -13,7 +13,7 @@ interface Data {
   image?: string[];
 }
 
-interface DataState {
+export interface DataState {
   countries: string[];
   submissions: Data[];
 }
@@ -34,4 +34,4 @@ const dataSlice = createSlice({
 });
 
 export const { setSubmission } = dataSlice.actions;
-export default dataSlice.reducer;
+export const dataReducer = dataSlice.reducer;
