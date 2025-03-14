@@ -1,0 +1,16 @@
+.footer {
+  padding: 0 5vh;
+  background: #632240;
+  display: flex;
+  min-height: 10vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.year {
+  color: #fbbaa7;
+  font-family: 'Anonymous Pro', monospace;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 40px;
+}
